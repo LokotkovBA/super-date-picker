@@ -15,12 +15,14 @@ export function endOfMonth(timeStamp: number) {
 export function getCalendarDates(timeStamp: number) {
     const arrayOfDays = new Array<number>(42).fill(0);
     const arrayOfMonths = new Array<number>(42).fill(-1);
-    setCalendarDates(timeStamp, arrayOfDays, arrayOfMonths);
-    return [arrayOfDays, arrayOfMonths] as const;
+    const selectedDateIndex = setCalendarDates(timeStamp, arrayOfDays, arrayOfMonths);
+    return [arrayOfDays, arrayOfMonths, selectedDateIndex] as const;
 }
 
 function setCalendarDates(timeStamp: number, arrayOfDays: number[], arrayOfMonths: number[]) {
     const date = new Date(timeStamp);
+    const selectedDate = date.getDate();
+    let selectedDateIndex = 0;
     date.setDate(0);
     const toMonday = date.getDay() - 1;
     const lastDateOfPrevMonth = date.getDate();
@@ -45,20 +47,24 @@ function setCalendarDates(timeStamp: number, arrayOfDays: number[], arrayOfMonth
     const curEndOfMonth = endOfMonth(timeStamp);
     const lastDateOfCurMonth = curEndOfMonth.getDate();
 
-    let curDay = 1;
+    let curDate = 1;
     i++;
-    while (curDay <= lastDateOfCurMonth) {
-        arrayOfDays[i] = curDay;
+    while (curDate <= lastDateOfCurMonth) {
+        arrayOfDays[i] = curDate;
         arrayOfMonths[i] = 0;
-        curDay++;
+        if (curDate === selectedDate) {
+            selectedDateIndex = i;
+        }
+        curDate++;
         i++;
     }
-    curDay = 1;
+    curDate = 1;
     while (i < arrayOfDays.length) {
-        arrayOfDays[i] = curDay;
+        arrayOfDays[i] = curDate;
         arrayOfMonths[i] = 1;
-        curDay++;
+        curDate++;
         i++;
     }
+    return selectedDateIndex;
 }
 
