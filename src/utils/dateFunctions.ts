@@ -1,26 +1,16 @@
-export function startOfMonth(timeStamp: number) {
-    const date = new Date(timeStamp);
-    date.setDate(1);
-    date.setHours(0, 0, 0, 0);
-    return date;
-}
-
-export function endOfMonth(timeStamp: number) {
-    const date = new Date(timeStamp);
-    const month = date.getMonth();
-    date.setMonth(month + 1, 0);
-    return date;
-}
-
 export function getCalendarDates(timeStamp: number) {
     const arrayOfDays = new Array<number>(42).fill(0);
     const arrayOfMonths = new Array<number>(42).fill(-1);
-    const selectedDateIndex = setCalendarDates(timeStamp, arrayOfDays, arrayOfMonths);
+    const selectedDate = new Date(timeStamp);
+    let selectedDateIndex = setCalendarDates(selectedDate, arrayOfDays, arrayOfMonths);
+    const currentDate = new Date();
+    if (selectedDate.getMonth() !== currentDate.getMonth() && selectedDate.getFullYear() !== currentDate.getFullYear()) {
+        selectedDateIndex = -1;
+    }
     return [arrayOfDays, arrayOfMonths, selectedDateIndex] as const;
 }
 
-function setCalendarDates(timeStamp: number, arrayOfDays: number[], arrayOfMonths: number[]) {
-    const date = new Date(timeStamp);
+function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: number[]) {
     const selectedDate = date.getDate();
     let selectedDateIndex = 0;
     date.setDate(0);
@@ -44,8 +34,9 @@ function setCalendarDates(timeStamp: number, arrayOfDays: number[], arrayOfMonth
         i++;
     }
 
-    const curEndOfMonth = endOfMonth(timeStamp);
-    const lastDateOfCurMonth = curEndOfMonth.getDate();
+    date.setMonth(date.getMonth() + 2);
+    date.setDate(0);
+    const lastDateOfCurMonth = date.getDate();
 
     let curDate = 1;
     i++;
