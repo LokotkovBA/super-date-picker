@@ -7,10 +7,11 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 const [datesArray, monthsArray, todayIndex] = getCalendarDates(Date.now());
 
 function dateStyles(isToday: boolean, isUserSelected: boolean, isSelectedMonth: boolean) {
-    return clsx("cursor-pointer border-2 border-slate-950 duration-200 hover:scale-125 hover:font-bold hover:underline p-1.5 leading-none w-8 text-center",
+    return clsx("cursor-pointer border-2 duration-200 hover:scale-125 hover:font-bold hover:underline p-1.5 leading-none w-8 text-center",
         {
             "text-sky-500 font-bold": (!isUserSelected && isToday),
             "bg-sky-700 border-sky-500 rounded": isUserSelected,
+            "border-slate-950": !isUserSelected,
             "text-slate-50": isSelectedMonth,
             "text-slate-500": !isSelectedMonth
         });
