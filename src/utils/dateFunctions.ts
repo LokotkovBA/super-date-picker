@@ -61,6 +61,7 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
         curDate++;
         i++;
     }
+    date.setDate(selectedDate);
     return [selectedDateIndex, todayIndex] as const;
 }
 

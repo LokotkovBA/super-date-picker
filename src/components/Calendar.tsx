@@ -37,8 +37,10 @@ function useCalendar(date: Date) {
             newMonth = 0;
             selectedDate.current.setFullYear(selectedDate.current.getFullYear() + 1);
         }
-        selectedDate.current.setDate(1);
         selectedDate.current.setMonth(newMonth);
+        if (selectedDate.current.getMonth() !== newMonth) {
+            selectedDate.current.setDate(0);
+        }
         if (userSelectedDay) {
             selectedDate.current.setDate(userSelectedDay);
         }
@@ -56,12 +58,14 @@ type CalendarProps = {
 const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
     const { dateData: { arrayOfDays, arrayOfMonths, todayIndex }, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex } = useCalendar(selectedDate);
     function onDateClick(index: number) {
+        const userSelectedDay = arrayOfDays[index];
         if (!arrayOfMonths[index]) {
+            selectedDate.setDate(userSelectedDay);
             setUserSelectedDateIndex(index);
             return;
         }
 
-        switchMonth(arrayOfMonths[index], arrayOfDays[index]);
+        switchMonth(arrayOfMonths[index], userSelectedDay);
     }
     return (
         <div className="p-3 w-fit bg-slate-950 text-slate-50 flex flex-col items-center gap-1">
