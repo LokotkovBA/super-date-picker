@@ -12,11 +12,13 @@ function dateStyles(isToday: boolean, isUserSelected: boolean, isSelectedMonth: 
         {
             "text-sky-500 font-bold": isTodayNotSelected,
             "bg-sky-700 border-sky-500 rounded": isUserSelected,
-            "border-slate-950": !isUserSelected,
-            "text-slate-50": isSelectedMonth && !isTodayNotSelected,
-            "text-slate-500": !isSelectedMonth && !isTodayNotSelected
+            "border-transparent": !isUserSelected,
+            "text-gr neutral-50": isSelectedMonth && !isTodayNotSelected,
+            "text-neutral-500": !isSelectedMonth && !isTodayNotSelected
         });
 }
+const arrowStyles = "hover:bg-neutral-800 rounded-lg";
+const headingTextStyles = "text-xl focus:underline hover:text-sky-500 hover:cursor-pointer";
 
 function useCalendar(date: Date) {
     const selectedDate = useRef<Date>(date);
@@ -49,14 +51,14 @@ function useCalendar(date: Date) {
         setDateData(newDateData);
         setSelectedMonth(newMonth);
     }
-    return { dateData, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex } as const;
+    return { dateData, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear: selectedDate.current.getFullYear() } as const;
 }
 
 type CalendarProps = {
     selectedDate: Date
 }
 const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
-    const { dateData: { arrayOfDays, arrayOfMonths, todayIndex }, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex } = useCalendar(selectedDate);
+    const { dateData: { arrayOfDays, arrayOfMonths, todayIndex }, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear } = useCalendar(selectedDate);
     function onDateClick(index: number) {
         const userSelectedDay = arrayOfDays[index];
         if (!arrayOfMonths[index]) {
@@ -68,24 +70,27 @@ const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
         switchMonth(arrayOfMonths[index], userSelectedDay);
     }
     return (
-        <div className="p-3 w-fit bg-slate-950 text-slate-50 flex flex-col items-center gap-1">
-            <div className="flex items-center gap-1">
-                <button onClick={() => switchMonth(-1)}><ArrowLeft size="1.5rem" color="fill-slate-50" /></button>
-                {months[selectedMonth]}
-                <button onClick={() => switchMonth(1)}><ArrowRight size="1.5rem" color="fill-slate-50" /></button>
-            </div>
+        <section className="font-sans text-xs p-3 w-fit bg-neutral-900 text-neutral-50 flex flex-col gap-1">
+            <h2 className="flex items-center gap-2 mb-2">
+                <button className={`mr-auto ${arrowStyles}`} onClick={() => switchMonth(-1)}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
+                <button className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
+                <button className={`font-light text-neutral-500 ${headingTextStyles}`}>{selectedYear}</button>
+                <button className={`ml-auto ${arrowStyles}`} onClick={() => switchMonth(1)}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
+            </h2>
             <div className="grid grid-cols-7 gap-1 justify-items-center">
                 {daysOfWeek.map(day => {
-                    return <div key={day} className="text-slate-500">{day}</div>;
+                    return <div key={day} className="text-neutral-500">{day}</div>;
                 })}
+            </div>
+            <div tabIndex={0} className="rounded-md focus:bg-neutral-800 focus-within:bg-neutral-800 grid grid-cols-7 gap-1 justify-items-center">
                 {arrayOfDays.map((date, index) => {
-                    return <div onClick={() => onDateClick(index)}
+                    return <button onClick={() => onDateClick(index)}
                         className={dateStyles(index === todayIndex, index === userSelectedDateIndex, arrayOfMonths[index] === 0)} key={index}>
                         {date}
-                    </div>;
+                    </button>;
                 })}
             </div >
-        </div>
+        </section>
     );
 };
 
