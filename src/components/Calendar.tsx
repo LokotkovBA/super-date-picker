@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { getCalendarDates } from "~/utils/dateFunctions";
 import clsx from "clsx";
 import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
@@ -29,7 +29,7 @@ function useCalendar(date: Date) {
         return dateData;
     });
 
-    function switchMonth(dif: number, userSelectedDay?: number) {
+    function incrementMonth(dif: number, userSelectedDay?: number) {
         let newMonth = date.getMonth() + dif;
         if (newMonth < 0) {
             newMonth = 11;
@@ -50,14 +50,45 @@ function useCalendar(date: Date) {
         setDateData(newDateData);
         setSelectedMonth(newMonth);
     }
-    return { dateData, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear: date.getFullYear() } as const;
+    function selectMonth(monthIndex: number) {
+        date.setMonth(monthIndex);
+        if (date.getMonth() !== monthIndex) {
+            date.setDate(0);
+        }
+        const newDateData = getCalendarDates(date);
+        setUserSelectedDateIndex(newDateData.userSelectedDay);
+        setDateData(newDateData);
+        setSelectedMonth(monthIndex);
+    }
+    return { dateData, selectedMonth, incrementMonth, selectMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear: date.getFullYear() } as const;
 }
 
 type CalendarProps = {
     selectedDate: Date
 }
 const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
-    const { dateData: { arrayOfDays, arrayOfMonths, todayIndex }, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear } = useCalendar(selectedDate);
+    const calendarData = useCalendar(selectedDate);
+    const [modeSelect, setModeSelect] = useState(0);
+    return <article className="font-sans w-fit text-xs py-3 bg-neutral-900 text-neutral-50">
+        {modeSelect === 0 && <DatePicker calendarData={calendarData} changeMode={setModeSelect} selectedDate={selectedDate} />}
+        {modeSelect === 1 && <MonthPicker selectMonth={calendarData.selectMonth} changeMode={setModeSelect} selectedMonth={calendarData.selectedMonth} />}
+    </article>;
+};
+
+type DatePickerProps = {
+    selectedDate: Date
+    calendarData: ReturnType<typeof useCalendar>
+    changeMode: React.Dispatch<React.SetStateAction<number>>
+}
+
+const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, changeMode, calendarData: {
+    dateData: { arrayOfDays, todayIndex, arrayOfMonths },
+    selectedMonth,
+    selectedYear,
+    setUserSelectedDateIndex,
+    incrementMonth,
+    userSelectedDateIndex
+} }) => {
     function onDateClick(index: number) {
         const userSelectedDay = arrayOfDays[index];
         if (!arrayOfMonths[index]) {
@@ -66,15 +97,15 @@ const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
             return;
         }
 
-        switchMonth(arrayOfMonths[index], userSelectedDay);
+        incrementMonth(arrayOfMonths[index], userSelectedDay);
     }
     return (
-        <section className="font-sans text-xs p-3 w-fit bg-neutral-900 text-neutral-50 flex flex-col gap-1">
+        <section className="flex flex-col gap-1 px-3">
             <h2 className="flex items-center gap-2 mb-2">
-                <button className={`mr-auto ${arrowStyles}`} onClick={() => switchMonth(-1)}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
-                <button className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
+                <button className={`mr-auto ${arrowStyles}`} onClick={() => incrementMonth(-1)}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
+                <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
                 <button className={`font-light text-neutral-500 ${headingTextStyles}`}>{selectedYear}</button>
-                <button className={`ml-auto ${arrowStyles}`} onClick={() => switchMonth(1)}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
+                <button className={`ml-auto ${arrowStyles}`} onClick={() => incrementMonth(1)}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
             </h2>
             <div className="grid grid-cols-7 gap-1 justify-items-center">
                 {daysOfWeek.map(day => {
@@ -93,4 +124,29 @@ const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
     );
 };
 
+type MonthPickerProps = {
+    selectedMonth: number
+    selectMonth: (monthIndex: number) => void
+    changeMode: React.Dispatch<React.SetStateAction<number>>
+}
+
+const MonthPicker: React.FC<MonthPickerProps> = ({ selectMonth, changeMode, selectedMonth }) => {
+    function onMonthClick(monthIndex: number) {
+        selectMonth(monthIndex);
+        changeMode(0);
+    }
+
+    return (
+        <section className="grid grid-cols-3 px-2">
+            {months.map((month, index) => (
+                <button className={clsx("w-32 h-6 text-xs rounded my-2", {
+                    "bg-sky-700 font-semibold": index === selectedMonth,
+                    "hover:bg-neutral-800 text-neutral-400": index !== selectedMonth
+                })} onClick={() => onMonthClick(index)}>
+                    {month}
+                </button>
+            ))}
+        </section>
+    );
+};
 export default Calendar;
