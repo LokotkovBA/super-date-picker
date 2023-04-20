@@ -16,5 +16,5 @@ export default meta;
 type Story = StoryObj<typeof Calendar>;
 
 export const Primary: Story = {
-    render: () => <Calendar selectedDate={Date.now()} />,
+    render: () => <Calendar selectedDate={new Date()} />,
 };

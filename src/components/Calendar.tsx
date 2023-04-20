@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { getCalendarDates } from "~/utils/dateFunctions";
 import clsx from "clsx";
+import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
 
 const daysOfWeek = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const [datesArray, monthsArray, todayIndex] = getCalendarDates(Date.now());
 
 function dateStyles(isToday: boolean, isUserSelected: boolean, isSelectedMonth: boolean) {
     const isTodayNotSelected = !isUserSelected && isToday;
@@ -18,23 +18,70 @@ function dateStyles(isToday: boolean, isUserSelected: boolean, isSelectedMonth: 
         });
 }
 
-type CalendarProps = {
-    selectedDate: number
+function useCalendar(date: Date) {
+    const selectedDate = useRef<Date>(date);
+    const [selectedMonth, setSelectedMonth] = useState(date.getMonth());
+    const [userSelectedDateIndex, setUserSelectedDateIndex] = useState(0);
+    const [dateData, setDateData] = useState(() => {
+        const dateData = getCalendarDates(date);
+        setUserSelectedDateIndex(dateData.todayIndex);
+        return dateData;
+    });
+
+    function switchMonth(dif: number, userSelectedDay?: number) {
+        let newMonth = selectedDate.current.getMonth() + dif;
+        if (newMonth < 0) {
+            newMonth = 11;
+            selectedDate.current.setFullYear(selectedDate.current.getFullYear() - 1);
+        } else if (newMonth > 11) {
+            newMonth = 0;
+            selectedDate.current.setFullYear(selectedDate.current.getFullYear() + 1);
+        }
+        selectedDate.current.setDate(1);
+        selectedDate.current.setMonth(newMonth);
+        if (userSelectedDay) {
+            selectedDate.current.setDate(userSelectedDay);
+        }
+        const newDateData = getCalendarDates(selectedDate.current);
+        setUserSelectedDateIndex(newDateData.userSelectedDay);
+        setDateData(newDateData);
+        setSelectedMonth(newMonth);
+    }
+    return { dateData, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex } as const;
 }
-const Calendar: React.FC<CalendarProps> = () => {
-    const [userSelectedDateIndex, setUserSelectedDateIndex] = useState(todayIndex);
+
+type CalendarProps = {
+    selectedDate: Date
+}
+const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
+    const { dateData: { arrayOfDays, arrayOfMonths, todayIndex }, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex } = useCalendar(selectedDate);
+    function onDateClick(index: number) {
+        if (!arrayOfMonths[index]) {
+            setUserSelectedDateIndex(index);
+            return;
+        }
+
+        switchMonth(arrayOfMonths[index], arrayOfDays[index]);
+    }
     return (
-        <div className="max-w-xs bg-slate-950 grid grid-cols-7 gap-1 justify-items-center p-3">
-            {daysOfWeek.map(day => {
-                return <div key={day} className="text-slate-500">{day}</div>;
-            })}
-            {datesArray.map((date, index) => {
-                return <div onClick={() => setUserSelectedDateIndex(index)}
-                    className={dateStyles(index === todayIndex, index === userSelectedDateIndex, monthsArray[index] === 0)} key={index}>
-                    {date}
-                </div>;
-            })}
-        </div >
+        <div className="p-3 w-fit bg-slate-950 text-slate-50 flex flex-col items-center gap-1">
+            <div className="flex items-center gap-1">
+                <button onClick={() => switchMonth(-1)}><ArrowLeft size="1.5rem" color="fill-slate-50" /></button>
+                {months[selectedMonth]}
+                <button onClick={() => switchMonth(1)}><ArrowRight size="1.5rem" color="fill-slate-50" /></button>
+            </div>
+            <div className="grid grid-cols-7 gap-1 justify-items-center">
+                {daysOfWeek.map(day => {
+                    return <div key={day} className="text-slate-500">{day}</div>;
+                })}
+                {arrayOfDays.map((date, index) => {
+                    return <div onClick={() => onDateClick(index)}
+                        className={dateStyles(index === todayIndex, index === userSelectedDateIndex, arrayOfMonths[index] === 0)} key={index}>
+                        {date}
+                    </div>;
+                })}
+            </div >
+        </div>
     );
 };
 
