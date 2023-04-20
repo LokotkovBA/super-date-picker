@@ -1,6 +1,6 @@
 export function getCalendarDates(selectedDate: Date) {
-    const arrayOfDays = new Array<number>(42).fill(0);
-    const arrayOfMonths = new Array<number>(42).fill(-1);
+    const arrayOfDays = new Array<number>(35).fill(0);
+    const arrayOfMonths = new Array<number>(35).fill(-1);
 
     const [userSelectedDay, todayIndex] = setCalendarDates(selectedDate, arrayOfDays, arrayOfMonths);
 
@@ -32,6 +32,10 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
     date.setMonth(date.getMonth() + 2);
     date.setDate(0);
     const lastDateOfCurMonth = date.getDate();
+    let daysToAdd = date.getDay();
+    if (daysToAdd !== 0) {
+        daysToAdd = 7 - daysToAdd;
+    }
 
     const today = new Date();
     let todayIndex = -1;
@@ -55,6 +59,11 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
         i++;
     }
     curDate = 1;
+    if (arrayOfDays.length > 35) {
+        arrayOfDays.length += daysToAdd;
+        arrayOfMonths.length += daysToAdd;
+    }
+
     while (i < arrayOfDays.length) {
         arrayOfDays[i] = curDate;
         arrayOfMonths[i] = 1;
