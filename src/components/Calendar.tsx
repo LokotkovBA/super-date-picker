@@ -21,7 +21,6 @@ const arrowStyles = "hover:bg-neutral-800 rounded-lg";
 const headingTextStyles = "text-xl focus:underline hover:text-sky-500 hover:cursor-pointer";
 
 function useCalendar(date: Date) {
-    const selectedDate = useRef<Date>(date);
     const [selectedMonth, setSelectedMonth] = useState(date.getMonth());
     const [userSelectedDateIndex, setUserSelectedDateIndex] = useState(0);
     const [dateData, setDateData] = useState(() => {
@@ -31,27 +30,27 @@ function useCalendar(date: Date) {
     });
 
     function switchMonth(dif: number, userSelectedDay?: number) {
-        let newMonth = selectedDate.current.getMonth() + dif;
+        let newMonth = date.getMonth() + dif;
         if (newMonth < 0) {
             newMonth = 11;
-            selectedDate.current.setFullYear(selectedDate.current.getFullYear() - 1);
+            date.setFullYear(date.getFullYear() - 1);
         } else if (newMonth > 11) {
             newMonth = 0;
-            selectedDate.current.setFullYear(selectedDate.current.getFullYear() + 1);
+            date.setFullYear(date.getFullYear() + 1);
         }
-        selectedDate.current.setMonth(newMonth);
-        if (selectedDate.current.getMonth() !== newMonth) {
-            selectedDate.current.setDate(0);
+        date.setMonth(newMonth);
+        if (date.getMonth() !== newMonth) {
+            date.setDate(0);
         }
         if (userSelectedDay) {
-            selectedDate.current.setDate(userSelectedDay);
+            date.setDate(userSelectedDay);
         }
-        const newDateData = getCalendarDates(selectedDate.current);
+        const newDateData = getCalendarDates(date);
         setUserSelectedDateIndex(newDateData.userSelectedDay);
         setDateData(newDateData);
         setSelectedMonth(newMonth);
     }
-    return { dateData, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear: selectedDate.current.getFullYear() } as const;
+    return { dateData, selectedMonth, switchMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear: date.getFullYear() } as const;
 }
 
 type CalendarProps = {
