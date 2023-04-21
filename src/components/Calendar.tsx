@@ -14,7 +14,7 @@ function dateStyles(isToday: boolean, isUserSelected: boolean, isSelectedMonth: 
             "bg-sky-700 border-sky-500 rounded": isUserSelected,
             "border-transparent": !isUserSelected,
             "text-gr neutral-50": isSelectedMonth && !isTodayNotSelected,
-            "text-neutral-500": !isSelectedMonth && !isTodayNotSelected
+            "text-neutral-400": !isSelectedMonth && !isTodayNotSelected
         });
 }
 const arrowStyles = "hover:bg-neutral-800 rounded-lg";
@@ -104,12 +104,12 @@ const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, changeMode, calen
             <h2 className="flex items-center gap-2 mb-2">
                 <button className={`mr-auto ${arrowStyles}`} onClick={() => incrementMonth(-1)}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
                 <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
-                <button className={`font-light text-neutral-500 ${headingTextStyles}`}>{selectedYear}</button>
+                <button className={`font-light text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
                 <button className={`ml-auto ${arrowStyles}`} onClick={() => incrementMonth(1)}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
             </h2>
             <div className="grid grid-cols-7 gap-1 justify-items-center">
                 {daysOfWeek.map(day => {
-                    return <div key={day} className="text-neutral-500">{day}</div>;
+                    return <div key={day} className="text-neutral-400">{day}</div>;
                 })}
             </div>
             <div tabIndex={0} className="rounded-md focus:bg-neutral-800 focus-within:bg-neutral-800 grid grid-cols-7 gap-1 justify-items-center">
