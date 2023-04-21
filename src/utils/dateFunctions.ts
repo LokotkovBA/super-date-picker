@@ -18,8 +18,8 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
         date.setDate(lastDateOfPrevMonth - toMonday);
         arrayOfDays[toMonday] = lastDateOfPrevMonth;
     } else {
-        date.setDate(lastDateOfPrevMonth - 6);
-        arrayOfDays[6] = lastDateOfPrevMonth;
+        arrayOfDays[0] = 1;
+        arrayOfMonths[0] = 0;
     }
     const firstDay = date.getDate();
     let i = 0;
@@ -44,7 +44,7 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
         todayDate = today.getDate();
     }
 
-    let curDate = 1;
+    let curDate = arrayOfDays[0] === 1 ? 2 : 1;
     i++;
     while (curDate <= lastDateOfCurMonth) {
         arrayOfDays[i] = curDate;
