@@ -3,12 +3,9 @@ import clsx from "clsx";
 import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
 import { useCalendar, useTime } from "./hooks";
 import { daysOfWeek, hours, months } from "~/utils/dateFunctions";
+import { type ModeProps } from "../SuperDatePicker";
 
-type CalendarProps = {
-    selectedDate: Date
-    dateSetter: (date: Date) => void
-}
-const Calendar: React.FC<CalendarProps> = ({ selectedDate, dateSetter }) => {
+const Calendar: React.FC<ModeProps> = ({ selectedDate, dateSetter }) => {
     const calendarData = useCalendar(selectedDate, dateSetter);
     const [modeSelect, setModeSelect] = useState(0);
     return <div onClick={(event) => event.stopPropagation()} className="text-xs">
@@ -71,10 +68,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
         <div className="flex gap-3 pl-3">
             <section className="py-3">
                 <h3 className="flex gap-2 mb-2">
-                    <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
+                    <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" className="fill-neutral-50" /></button>
                     <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
                     <button onClick={() => changeMode(2)} className={`font-light text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
-                    <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
+                    <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" className="fill-neutral-50" /></button>
                 </h3>
                 <div className="grid grid-cols-7 gap-1 justify-items-center mt-auto mb-1">
                     {daysOfWeek.map(day => {
