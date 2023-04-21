@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { getCalendarDates } from "~/utils/dateFunctions";
 import clsx from "clsx";
 import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
@@ -72,8 +72,19 @@ function useCalendar(date: Date) {
         setUserSelectedDateIndex(newDateData.userSelectedDay);
         setDateData(newDateData);
     }
-    return { dateData, selectedMonth, incrementMonth, selectMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectYear, selectedYear: date.getFullYear() } as const;
+
+    return {
+        dateData,
+        selectedMonth,
+        incrementMonth,
+        selectMonth,
+        userSelectedDateIndex,
+        setUserSelectedDateIndex,
+        selectYear,
+        selectedYear: date.getFullYear(),
+    } as const;
 }
+
 
 type CalendarProps = {
     selectedDate: Date
@@ -81,7 +92,7 @@ type CalendarProps = {
 const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
     const calendarData = useCalendar(selectedDate);
     const [modeSelect, setModeSelect] = useState(0);
-    return <article className="font-sans w-fit text-xs py-3 bg-neutral-900 text-neutral-50">
+    return <article className="font-sans w-fit text-xs bg-neutral-900 text-neutral-50">
         {modeSelect === 0 && <DatePicker calendarData={calendarData} changeMode={setModeSelect} selectedDate={selectedDate} />}
         {modeSelect === 1 && <MonthPicker selectMonth={calendarData.selectMonth} changeMode={setModeSelect} selectedMonth={calendarData.selectedMonth} />}
         {modeSelect === 2 && <YearPicker selectYear={calendarData.selectYear} changeMode={setModeSelect} selectedYear={calendarData.selectedYear} />}
@@ -113,26 +124,115 @@ const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, changeMode, calen
         incrementMonth(arrayOfMonths[index], userSelectedDay);
     }
     return (
-        <section className="flex flex-col gap-1 px-3">
-            <h2 className="flex items-center gap-2 mb-2">
-                <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
-                <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
-                <button onClick={() => changeMode(2)} className={`font-light text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
-                <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
-            </h2>
-            <div className="grid grid-cols-7 gap-1 justify-items-center">
-                {daysOfWeek.map(day => {
-                    return <div key={day} className="text-neutral-400">{day}</div>;
+        <section className="flex gap-3 pl-3">
+            <section className="py-3">
+                <h2 className="flex gap-2 mb-2">
+                    <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
+                    <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
+                    <button onClick={() => changeMode(2)} className={`font-light text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
+                    <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
+                </h2>
+                <div className="grid grid-cols-7 gap-1 justify-items-center mt-auto">
+                    {daysOfWeek.map(day => {
+                        return <div key={day} className="text-neutral-400">{day}</div>;
+                    })}
+                </div>
+                <div tabIndex={0} className="rounded-md focus:bg-neutral-800 focus-within:bg-neutral-800 grid grid-cols-7 gap-1 justify-items-center">
+                    {arrayOfDays.map((date, index) => {
+                        return <button onClick={() => onDateClick(index)}
+                            className={dateStyles(index === todayIndex, index === userSelectedDateIndex, arrayOfMonths[index] === 0)} key={index}>
+                            {date}
+                        </button>;
+                    })}
+                </div >
+            </section>
+            <TimePicker selecteDate={selectedDate} />
+        </section>
+    );
+};
+
+const hours = [
+    "00",
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+];
+function useTime(date: Date) {
+    const [selectedHour, setSelectedHour] = useState(date.getHours());
+    const [halfPast, setHalfPast] = useState(date.getMinutes() > 29);
+    const [isApprox, setIsApprox] = useState(true);
+    function setStates(hours: number, minutes: number, seconds: number) {
+        setSelectedHour(hours);
+        setHalfPast(minutes > 29);
+        date.setHours(hours, minutes, seconds);
+    }
+    function selectHour(hours: number, minutes: number) {
+        setStates(hours, minutes, 0);
+        setIsApprox(false);
+    }
+    function setTime(hours: number, minutes?: number, seconds?: number) {
+        setStates(hours, minutes ? minutes : date.getMinutes(), seconds ? seconds : date.getSeconds());
+        setIsApprox(true);
+    }
+    return {
+        selectedHour,
+        halfPast,
+        selectHour,
+        setTime,
+        isApprox
+    } as const;
+}
+type TimePickerProps = {
+    selecteDate: Date
+}
+function timeStyles(isSelected: boolean, isApprox: boolean) {
+    return clsx("rounded px-2 cursor-pointer hover:underline border-2", {
+        "bg-sky-700 border-sky-500": isSelected && !isApprox,
+        "bg-neutral-700 border-neutral-700": isApprox && isSelected,
+        "bg-transparent border-transparent": !isSelected
+    });
+}
+const TimePicker: React.FC<TimePickerProps> = ({ selecteDate }) => {
+    const { halfPast, selectedHour, selectHour, isApprox } = useTime(selecteDate);
+    const listRef = useRef<HTMLUListElement>(null);
+
+    useLayoutEffect(() => {
+        const elementId = `#hour${hours[selecteDate.getHours()]}${selecteDate.getMinutes() > 29 ? "30" : "00"}`;
+        listRef.current?.querySelector(elementId)?.scrollIntoView({ block: "center" });
+    }, [selecteDate]);
+
+    return (
+        <section tabIndex={0} className="focus:bg-neutral-800 flex items-center pr-2" >
+            <ul ref={listRef} className="h-52 flex flex-col gap-1 overflow-y-scroll pl-4 pr-6 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
+                {hours.map((hour, index) => {
+                    return (
+                        <React.Fragment key={hour}>
+                            <li id={`hour${hour}00`} onClick={() => selectHour(index, 0)} className={timeStyles(selectedHour === index && !halfPast, isApprox)}>{hour}:00</li>
+                            <li id={`hour${hour}30`} onClick={() => selectHour(index, 30)} className={timeStyles(selectedHour === index && halfPast, isApprox)}>{hour}:30</li>
+                        </React.Fragment>
+                    );
                 })}
-            </div>
-            <div tabIndex={0} className="rounded-md focus:bg-neutral-800 focus-within:bg-neutral-800 grid grid-cols-7 gap-1 justify-items-center">
-                {arrayOfDays.map((date, index) => {
-                    return <button onClick={() => onDateClick(index)}
-                        className={dateStyles(index === todayIndex, index === userSelectedDateIndex, arrayOfMonths[index] === 0)} key={index}>
-                        {date}
-                    </button>;
-                })}
-            </div >
+            </ul>
         </section>
     );
 };
