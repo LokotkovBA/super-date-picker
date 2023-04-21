@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { getCalendarDates } from "~/utils/dateFunctions";
 import clsx from "clsx";
 import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
@@ -50,6 +50,7 @@ function useCalendar(date: Date) {
         setDateData(newDateData);
         setSelectedMonth(newMonth);
     }
+
     function selectMonth(monthIndex: number) {
         date.setMonth(monthIndex);
         if (date.getMonth() !== monthIndex) {
@@ -60,7 +61,18 @@ function useCalendar(date: Date) {
         setDateData(newDateData);
         setSelectedMonth(monthIndex);
     }
-    return { dateData, selectedMonth, incrementMonth, selectMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectedYear: date.getFullYear() } as const;
+
+    function selectYear(year: number) {
+        const curMonth = date.getMonth();
+        date.setFullYear(year);
+        if (curMonth !== date.getMonth()) {
+            date.setDate(0);
+        }
+        const newDateData = getCalendarDates(date);
+        setUserSelectedDateIndex(newDateData.userSelectedDay);
+        setDateData(newDateData);
+    }
+    return { dateData, selectedMonth, incrementMonth, selectMonth, userSelectedDateIndex, setUserSelectedDateIndex, selectYear, selectedYear: date.getFullYear() } as const;
 }
 
 type CalendarProps = {
@@ -72,6 +84,7 @@ const Calendar: React.FC<CalendarProps> = ({ selectedDate }) => {
     return <article className="font-sans w-fit text-xs py-3 bg-neutral-900 text-neutral-50">
         {modeSelect === 0 && <DatePicker calendarData={calendarData} changeMode={setModeSelect} selectedDate={selectedDate} />}
         {modeSelect === 1 && <MonthPicker selectMonth={calendarData.selectMonth} changeMode={setModeSelect} selectedMonth={calendarData.selectedMonth} />}
+        {modeSelect === 2 && <YearPicker selectYear={calendarData.selectYear} changeMode={setModeSelect} selectedYear={calendarData.selectedYear} />}
     </article>;
 };
 
@@ -102,10 +115,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, changeMode, calen
     return (
         <section className="flex flex-col gap-1 px-3">
             <h2 className="flex items-center gap-2 mb-2">
-                <button className={`mr-auto ${arrowStyles}`} onClick={() => incrementMonth(-1)}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
+                <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" color="fill-neutral-50" /></button>
                 <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
-                <button className={`font-light text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
-                <button className={`ml-auto ${arrowStyles}`} onClick={() => incrementMonth(1)}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
+                <button onClick={() => changeMode(2)} className={`font-light text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
+                <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" color="fill-neutral-50" /></button>
             </h2>
             <div className="grid grid-cols-7 gap-1 justify-items-center">
                 {daysOfWeek.map(day => {
@@ -144,6 +157,41 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ selectMonth, changeMode, sele
                     "hover:bg-neutral-800 text-neutral-400": index !== selectedMonth
                 })} onClick={() => onMonthClick(index)}>
                     {month}
+                </button>
+            ))}
+        </section>
+    );
+};
+type YearPickerProps = {
+    selectYear: (year: number) => void
+    changeMode: React.Dispatch<React.SetStateAction<number>>
+    selectedYear: number
+}
+
+const YearPicker: React.FC<YearPickerProps> = ({ selectedYear, selectYear, changeMode }) => {
+    const yearsRange = useMemo(() => {
+        let startYear = selectedYear - 7;
+        const range = new Array<number>(15);
+        for (let i = 0; i < 15; i++) {
+            range[i] = startYear;
+            startYear++;
+        }
+        return range;
+    }, [selectedYear]);
+
+    function onYearClick(year: number) {
+        selectYear(year);
+        changeMode(0);
+    }
+
+    return (
+        <section className="grid grid-cols-3 px-2">
+            {yearsRange.map((year) => (
+                <button className={clsx("w-32 h-6 text-xs rounded my-2", {
+                    "bg-sky-700 font-semibold": year === selectedYear,
+                    "hover:bg-neutral-800 text-neutral-400": year !== selectedYear
+                })} onClick={() => onYearClick(year)}>
+                    {year}
                 </button>
             ))}
         </section>
