@@ -24,15 +24,14 @@ function dateStyles(isToday: boolean, isUserSelected: boolean, isSelectedMonth: 
     const isTodayNotSelected = !isUserSelected && isToday;
     return clsx("cursor-pointer border-2 duration-200 hover:scale-125 hover:font-bold hover:underline p-1.5 leading-none w-8 text-center",
         {
-            "text-sky-500 font-bold": isTodayNotSelected,
-            "bg-sky-700 border-sky-500 rounded": isUserSelected,
+            "text-sky-600 dark:text-sky-500 font-bold": isTodayNotSelected,
+            "bg-sky-600 border-sky-600 text-white dark:bg-sky-700 dark:border-sky-500 rounded": isUserSelected,
             "border-transparent": !isUserSelected,
-            "text-gr neutral-50": isSelectedMonth && !isTodayNotSelected,
             "text-neutral-400": !isSelectedMonth && !isTodayNotSelected
         });
 }
-const arrowStyles = "hover:bg-neutral-800 rounded-lg";
-const headingTextStyles = "text-xl focus:underline hover:text-sky-500 hover:cursor-pointer";
+const arrowStyles = "hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg duration-200 hover:scale-125";
+const headingTextStyles = "text-xl focus:underline hover:text-sky-600 dark:hover:text-sky-500 hover:cursor-pointer";
 
 type DatePickerProps = {
     selectedDate: Date
@@ -69,20 +68,20 @@ const DatePicker: React.FC<DatePickerProps> = ({
     }
 
     return (
-        <div className="flex gap-3 pl-3">
+        <div className="flex justify-between gap-3 pl-3">
             <section className="py-3">
                 <h3 className="flex gap-2 mb-2">
-                    <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" className="fill-neutral-50" /></button>
+                    <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" className="dark:fill-neutral-50 fill-neutral-900" /></button>
                     <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
-                    <button onClick={() => changeMode(2)} className={`font-light text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
-                    <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" className="fill-neutral-50" /></button>
+                    <button onClick={() => changeMode(2)} className={`font-light text-neutral-500 dark:text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
+                    <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" className="dark:fill-neutral-50 fill-neutral-900" /></button>
                 </h3>
                 <div className="grid grid-cols-7 gap-1 justify-items-center mt-auto mb-1">
                     {daysOfWeek.map(day => {
-                        return <div key={day} className="text-neutral-400">{day}</div>;
+                        return <div key={day} className="text-neutral-500 dark:text-neutral-400">{day}</div>;
                     })}
                 </div>
-                <div tabIndex={0} className="rounded-md focus:bg-neutral-800 focus-within:bg-neutral-800 grid grid-cols-7 gap-1 justify-items-center">
+                <div tabIndex={0} className="rounded-md focus:bg-sky-100 focus-within:bg-sky-100 dark:focus:bg-neutral-800 dark:focus-within:bg-neutral-800 grid grid-cols-7 gap-1 justify-items-center">
                     {arrayOfDays.map((date, index) => {
                         return <button onClick={() => onDateClick(index)}
                             className={dateStyles(index === todayIndex, index === userSelectedDateIndex, arrayOfMonths[index] === 0)} key={index}>
@@ -98,9 +97,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
 function timeStyles(isSelected: boolean, isApprox: boolean) {
     return clsx("rounded px-2 cursor-pointer hover:underline border-2", {
-        "bg-sky-700 border-sky-500": isSelected && !isApprox,
-        "bg-neutral-700 border-neutral-700": isApprox && isSelected,
-        "bg-transparent border-transparent": !isSelected
+        "bg-sky-600 border-sky-600 text-white dark:bg-sky-700 dark:border-sky-500": isSelected && !isApprox,
+        "bg-sky-200 border-sky-200 dark:bg-neutral-700 dark:border-neutral-700": isApprox && isSelected,
+        "bg-transparent border-transparent dark:text-neutral-200": !isSelected
     });
 }
 type TimePickerProps = {
@@ -118,7 +117,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ selecteDate, dateSetter }) => {
     }, []);
 
     return (
-        <section tabIndex={0} className="focus:bg-neutral-800 flex items-center pr-2" >
+        <section tabIndex={0} className="focus:bg-sky-100 dark:focus:bg-neutral-800 flex items-center pr-2" >
             <ul ref={listRef} className="h-52 flex flex-col gap-1 overflow-y-scroll pl-4 pr-6 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
                 {hours.map((hour, index) => {
                     return (
@@ -149,8 +148,8 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ selectMonth, changeMode, sele
         <section className="h-60 grid grid-cols-3 pt-4 px-2">
             {months.map((month, index) => (
                 <button key={month} className={clsx("h-6 text-xs rounded my-2", {
-                    "bg-sky-700 font-semibold": index === selectedMonth,
-                    "hover:bg-neutral-800 text-neutral-400": index !== selectedMonth
+                    "text-white bg-sky-600 dark:bg-sky-700 font-semibold": index === selectedMonth,
+                    "hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-neutral-200": index !== selectedMonth
                 })} onClick={() => onMonthClick(index)}>
                     {month}
                 </button>
@@ -185,8 +184,8 @@ const YearPicker: React.FC<YearPickerProps> = ({ selectedYear, selectYear, chang
         <section className="h-60 grid grid-cols-3 px-2">
             {yearsRange.map((year) => (
                 <button key={year} className={clsx("w-32 h-6 text-xs rounded my-2", {
-                    "bg-sky-700 font-semibold": year === selectedYear,
-                    "hover:bg-neutral-800 text-neutral-400": year !== selectedYear
+                    "text-white bg-sky-600 dark:bg-sky-700 font-semibold": year === selectedYear,
+                    "hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-neutral-200": year !== selectedYear
                 })} onClick={() => onYearClick(year)}>
                     {year}
                 </button>

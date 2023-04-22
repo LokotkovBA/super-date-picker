@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { options, setTimeRelative, units } from "./utils";
 import { type useRelativeTime } from "./hooks";
 
-const inputStyles = "w-44 h-9 p-1 bg-neutral-800 focus:outline-none border-b-2 border-neutral-800 focus:border-sky-950";
+const inputStyles = "w-44 h-9 p-1 border-2 border-neutral-200 focus:border-b-sky-600 dark:bg-neutral-800 focus:outline-none dark:border-neutral-800 dark:focus:border-b-sky-900";
 
 type RelativeTimeProps = {
     dateSetter: (date: Date) => void
@@ -48,14 +48,14 @@ const RelativeTime: React.FC<RelativeTimeProps> = ({ dateSetter, relativeTimeDat
             </h3>
             <div className="flex items-center gap-2">
                 <button className={clsx("py-1 px-4 rounded-xl", {
-                    "bg-sky-900": rounded,
-                    "bg-neutral-800": !rounded
+                    "bg-sky-600 dark:bg-sky-900": rounded,
+                    "bg-neutral-300 dark:bg-neutral-800": !rounded
                 })} onClick={() => setRounded(prevRounded => !prevRounded)}>
                     <div className={clsx("transition-all ease-in-out", {
                         "translate-x-2": rounded,
                         "-translate-x-2": !rounded
                     })}>
-                        {rounded ? <CheckMark size="1rem" className="fill-sky-500" /> : <Cross className="fill-neutral-400" size="1rem" />}
+                        {rounded ? <CheckMark size="1rem" className="fill-sky-200 dark:fill-sky-500" /> : <Cross className="fill-neutral-500 dark:fill-neutral-400" size="1rem" />}
                     </div>
                 </button>
                 <span> Round to the {units[selectedOption % 7]}</span>

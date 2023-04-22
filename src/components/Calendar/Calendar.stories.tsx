@@ -10,9 +10,28 @@ const meta: Meta<typeof Calendar> = {
      */
     component: Calendar,
     decorators: [(StoryFn) => {
-        return <article className="font-sans w-96 bg-neutral-900 text-neutral-50 rounded flex flex-col">
-            <StoryFn />
-        </article>;
+        const [showedDate1, setShowedDate1] = useState(new Date());
+        const [showedDate2, setShowedDate2] = useState(new Date());
+        const dateSetter1 = useCallback((date: Date) => {
+            setShowedDate1(date);
+            action("Date set")(date);
+        }, []);
+        const dateSetter2 = useCallback((date: Date) => {
+            setShowedDate2(date);
+            action("Date set")(date);
+        }, []);
+        return (
+            <div className="flex flex-wrap gap-5 items-start">
+                <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                    <StoryFn args={{ selectedDate: showedDate1, dateSetter: dateSetter1 }} />
+                </article>
+                <div className="dark">
+                    <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                        <StoryFn args={{ selectedDate: showedDate2, dateSetter: dateSetter2 }} />
+                    </article>
+                </div>
+            </div>
+        );
     }]
 };
 
@@ -28,6 +47,6 @@ const MockParent = () => {
     return <Calendar selectedDate={showedDate} dateSetter={dateSetter} />;
 };
 
-export const Primary: Story = {
+export const Themes: Story = {
     render: () => <MockParent />
 };

@@ -12,20 +12,30 @@ const meta: Meta<typeof RelativeTime> = {
      */
     component: RelativeTime,
     decorators: [(StoryFn) => {
-        return <article className="font-sans w-96 bg-neutral-900 text-neutral-50 rounded flex flex-col">
-            <StoryFn />
-        </article>;
+        const relativeTimeData1 = useRelativeTime();
+        const relativeTimeData2 = useRelativeTime();
+        return (
+            <div className="flex flex-wrap gap-5">
+                <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                    <StoryFn args={{ relativeTimeData: relativeTimeData1, dateSetter: action("Date set") }} />
+                </article>
+                <div className="dark">
+                    <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                        <StoryFn args={{ relativeTimeData: relativeTimeData2, dateSetter: action("Date set") }} />
+                    </article>
+                </div>
+            </div>
+        );
     }]
 };
 
 export default meta;
 type Story = StoryObj<typeof RelativeTime>;
 
-const MockParent = () => {
-    const relativeTimeData = useRelativeTime();
-    return <RelativeTime relativeTimeData={relativeTimeData} dateSetter={action("Date set")} />;
+
+export const Themes: Story = {
+    args: {
+        dateSetter: action("Date change")
+    }
 };
 
-export const Primary: Story = {
-    render: () => <MockParent />
-};
