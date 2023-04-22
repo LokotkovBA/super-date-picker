@@ -58,6 +58,7 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
         i++;
     }
 
+    date.setDate(1);
     date.setMonth(date.getMonth() + 2);
     date.setDate(0);
     const lastDateOfCurMonth = date.getDate();
