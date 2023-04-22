@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import Calendar from "./Calendar";
 import clsx from "clsx";
 import RelativeTime from "./RelativeTime";
@@ -63,6 +63,10 @@ type NowTimeProps = {
 }
 
 const NowTime: React.FC<NowTimeProps> = ({ dateSetter }) => {
+    useLayoutEffect(() => {
+        dateSetter(new Date());
+    }, [dateSetter]);
+
     return (
         <section className="p-4 flex flex-col gap-3">
             <h3 className="text-sm">Setting the time to "now" means that on every refresh this time will be set to the time of the refresh.</h3>
