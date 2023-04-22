@@ -32,7 +32,7 @@ function parseDate(date: Date) {
 }
 
 const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ date, setSelectedDate }) => {
-    const [selectedMode, setSelectedMode] = useState(1);
+    const [selectedMode, setSelectedMode] = useState(2);
     const [showedDate, setShowedDate] = useState(date);
 
     const dateSetter = useCallback((newDate: Date) => {
@@ -49,6 +49,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ date, setSelectedDate
             </h2>
             {selectedMode === 0 && <Calendar selectedDate={date} dateSetter={dateSetter} />}
             {selectedMode === 1 && <RelativeTime selectedDate={date} dateSetter={dateSetter} />}
+            {selectedMode === 2 && <NowTime dateSetter={dateSetter} />}
             <div className="flex p-2 text-sm items-center">
                 <label className="bg-sky-950 border border-sky-950 px-1 py-1 text-neutral-200 font-semibold" htmlFor="selectedDate">Selected date</label>
                 <input className="grow bg-transparent border border-sky-950 px-2 py-1" name="selectedDate" disabled={true} value={parseDate(showedDate)} />
@@ -58,3 +59,16 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ date, setSelectedDate
 };
 
 export default SuperDatePicker;
+
+type NowTimeProps = {
+    dateSetter: (date: Date) => void
+}
+
+const NowTime: React.FC<NowTimeProps> = ({ dateSetter }) => {
+    return (
+        <section className="p-4 flex flex-col gap-3">
+            <h3 className="text-sm">Setting the time to "now" means that on every refresh this time will be set to the time of the refresh.</h3>
+            <button onClick={() => dateSetter(new Date())} className="bg-sky-900 rounded leading-loose hover:underline transition-all duration-300 ease-in-out hover:bg-sky-950 hover:-translate-y-px">Set start date and time to now</button>
+        </section>
+    );
+};

@@ -50,7 +50,7 @@ const RelativeTime: React.FC<ModeProps> = ({ dateSetter }) => {
 
     return (
         <section className="p-2 flex flex-col gap-5 items-start">
-            <h2 className="grid grid-cols-2 self-stretch">
+            <h3 className="grid grid-cols-2 self-stretch">
                 <input onChange={onInputChange} defaultValue={diffValue} className={inputStyles} type="number" min={0} />
                 <select onChange={onSelectChange} defaultValue="1" className={`place-self-end ${inputStyles}`}>
                     {options.map((option, index) => {
@@ -58,7 +58,7 @@ const RelativeTime: React.FC<ModeProps> = ({ dateSetter }) => {
                     })}
                 </select>
                 {showWarning && <p className="text-sm text-red-500">Must be a number</p>}
-            </h2>
+            </h3>
             <div className="flex items-center gap-2">
                 <button className={clsx("py-1 px-4 rounded-xl", {
                     "bg-sky-900": rounded,
