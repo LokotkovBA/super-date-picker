@@ -16,5 +16,5 @@ export default meta;
 type Story = StoryObj<typeof SuperDatePicker>;
 
 export const Primary: Story = {
-    render: () => <SuperDatePicker setSelectedDate={action("Date change")} className="w-5/12" date={new Date()} />
+    render: () => <SuperDatePicker setSelectedDate={action("Date change")} className="w-5/12" selectedDate={new Date()} />
 };
