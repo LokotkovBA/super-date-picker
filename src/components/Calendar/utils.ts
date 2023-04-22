@@ -23,9 +23,9 @@ export const hours = [
     "21",
     "22",
     "23",
-];
-export const daysOfWeek = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
-export const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+] as const;
+export const daysOfWeek = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"] as const;
+export const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] as const;
 
 export function getCalendarDates(selectedDate: Date) {
     const arrayOfDays = new Array<number>(35).fill(0);

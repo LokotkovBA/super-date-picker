@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCalendarDates } from "./utils";
 
 export function useCalendar(date: Date, dateSetter: (date: Date) => void) {
@@ -9,6 +9,14 @@ export function useCalendar(date: Date, dateSetter: (date: Date) => void) {
         setUserSelectedDateIndex(dateData.todayIndex);
         return dateData;
     });
+
+    useEffect(() => {
+        console.log("hey");
+        const newDateData = getCalendarDates(date);
+        setUserSelectedDateIndex(newDateData.userSelectedDay);
+        setDateData(newDateData);
+        setSelectedMonth(date.getMonth());
+    }, [date]);
 
     function incrementMonth(dif: number, userSelectedDay?: number) {
         let newMonth = date.getMonth() + dif;
@@ -26,10 +34,6 @@ export function useCalendar(date: Date, dateSetter: (date: Date) => void) {
         if (userSelectedDay) {
             date.setDate(userSelectedDay);
         }
-        const newDateData = getCalendarDates(date);
-        setUserSelectedDateIndex(newDateData.userSelectedDay);
-        setDateData(newDateData);
-        setSelectedMonth(newMonth);
         updateDate();
     }
 
@@ -38,10 +42,6 @@ export function useCalendar(date: Date, dateSetter: (date: Date) => void) {
         if (date.getMonth() !== monthIndex) {
             date.setDate(0);
         }
-        const newDateData = getCalendarDates(date);
-        setUserSelectedDateIndex(newDateData.userSelectedDay);
-        setDateData(newDateData);
-        setSelectedMonth(monthIndex);
         updateDate();
     }
 
@@ -51,9 +51,6 @@ export function useCalendar(date: Date, dateSetter: (date: Date) => void) {
         if (curMonth !== date.getMonth()) {
             date.setDate(0);
         }
-        const newDateData = getCalendarDates(date);
-        setUserSelectedDateIndex(newDateData.userSelectedDay);
-        setDateData(newDateData);
         updateDate();
     }
 
