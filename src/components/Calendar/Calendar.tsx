@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
 import { useCalendar, useTime } from "./hooks";
-import { daysOfWeek, hours, months } from "~/utils/dateFunctions";
+import { daysOfWeek, hours, months } from "./utils";
 import { type ModeProps } from "../SuperDatePicker";
 
 const Calendar: React.FC<ModeProps> = ({ selectedDate, dateSetter }) => {

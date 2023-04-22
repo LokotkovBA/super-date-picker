@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getCalendarDates } from "~/utils/dateFunctions";
+import { getCalendarDates } from "./utils";
 
 export function useCalendar(date: Date, dateSetter: (date: Date) => void) {
     const [selectedMonth, setSelectedMonth] = useState(date.getMonth());
