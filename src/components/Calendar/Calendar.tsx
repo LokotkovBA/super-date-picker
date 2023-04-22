@@ -3,9 +3,13 @@ import clsx from "clsx";
 import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
 import { useCalendar, useTime } from "./hooks";
 import { daysOfWeek, hours, months } from "./utils";
-import { type ModeProps } from "../SuperDatePicker";
 
-const Calendar: React.FC<ModeProps> = ({ selectedDate, dateSetter }) => {
+type CalendarProps = {
+    selectedDate: Date
+    dateSetter: (date: Date) => void
+}
+
+const Calendar: React.FC<CalendarProps> = ({ selectedDate, dateSetter }) => {
     const calendarData = useCalendar(selectedDate, dateSetter);
     const [modeSelect, setModeSelect] = useState(0);
     return <div onClick={(event) => event.stopPropagation()} className="text-xs">

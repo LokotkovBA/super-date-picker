@@ -11,7 +11,6 @@ export function useCalendar(date: Date, dateSetter: (date: Date) => void) {
     });
 
     useEffect(() => {
-        console.log("hey");
         const newDateData = getCalendarDates(date);
         setUserSelectedDateIndex(newDateData.userSelectedDay);
         setDateData(newDateData);

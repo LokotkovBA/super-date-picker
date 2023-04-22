@@ -2,11 +2,8 @@ import React, { useCallback, useState } from "react";
 import Calendar from "./Calendar";
 import clsx from "clsx";
 import RelativeTime from "./RelativeTime";
+import { useRelativeTime } from "./RelativeTime/hooks";
 
-export type ModeProps = {
-    selectedDate: Date
-    dateSetter: (date: Date) => void
-}
 function buttonStyles(isActive: boolean) {
     return clsx("hover:underline p-2", {
         "text-sky-400 focus:underline bg-opacity-10 focus:bg-sky-950 border-sky-500 border-b-2": isActive,
@@ -34,6 +31,7 @@ function parseDate(date: Date) {
 const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ selectedDate, setSelectedDate }) => {
     const [selectedMode, setSelectedMode] = useState(1);
     const [showedDate, setShowedDate] = useState(selectedDate);
+    const relativeTimeData = useRelativeTime();
 
     const dateSetter = useCallback((newDate: Date) => {
         setShowedDate(newDate);
@@ -47,8 +45,8 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ selectedDate, setSele
                 <button onClick={() => setSelectedMode(1)} className={buttonStyles(selectedMode === 1)}>Relative</button>
                 <button onClick={() => setSelectedMode(2)} className={buttonStyles(selectedMode === 2)}>Now</button>
             </h2>
-            {selectedMode === 0 && <Calendar selectedDate={showedDate} dateSetter={dateSetter} />}
-            {selectedMode === 1 && <RelativeTime selectedDate={selectedDate} dateSetter={dateSetter} />}
+            {selectedMode === 0 && <Calendar dateSetter={dateSetter} selectedDate={showedDate} />}
+            {selectedMode === 1 && <RelativeTime dateSetter={dateSetter} relativeTimeData={relativeTimeData} />}
             {selectedMode === 2 && <NowTime dateSetter={dateSetter} />}
             <div className="flex p-2 text-sm items-center">
                 <label className="bg-sky-950 border border-sky-950 px-1 py-1 text-neutral-200 font-semibold" htmlFor="selectedDate">Selected date</label>

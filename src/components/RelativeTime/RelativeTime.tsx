@@ -1,22 +1,23 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect } from "react";
 import Cross from "~/assets/Cross";
 import CheckMark from "~/assets/CheckMark";
 import clsx from "clsx";
-import { type ModeProps } from "../SuperDatePicker";
 import { options, setTimeRelative, units } from "./utils";
-
-function onChangeRounded(newRounded: boolean, selectedOption: number, diff: number, dateSetter: (date: Date) => void) {
-    const unitIndex = selectedOption % 7;
-    const relativeDiff = selectedOption === unitIndex ? -diff : diff;
-    setTimeRelative(units[unitIndex], relativeDiff, newRounded, dateSetter);
-}
+import { type useRelativeTime } from "./hooks";
 
 const inputStyles = "w-44 h-9 p-1 bg-neutral-800 focus:outline-none border-b-2 border-neutral-800 focus:border-sky-950";
-const RelativeTime: React.FC<ModeProps> = ({ dateSetter }) => {
-    const [rounded, setRounded] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(1);
-    const [diffValue, setDiffValue] = useState(30);
-    const [showWarning, setShowWarning] = useState(false);
+
+type RelativeTimeProps = {
+    dateSetter: (date: Date) => void
+    relativeTimeData: ReturnType<typeof useRelativeTime>
+}
+const RelativeTime: React.FC<RelativeTimeProps> = ({ dateSetter, relativeTimeData }) => {
+    const {
+        rounded, setRounded,
+        selectedOption, setSelectedOption,
+        diffValue, setDiffValue,
+        showWarning, setShowWarning
+    } = relativeTimeData;
 
     function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
         const newDiff = parseInt(event.target.value);
@@ -25,34 +26,20 @@ const RelativeTime: React.FC<ModeProps> = ({ dateSetter }) => {
             return;
         }
         setShowWarning(false);
-        const unitIndex = selectedOption % 7;
         setDiffValue(newDiff);
-        const relativeDiff = selectedOption === unitIndex ? -newDiff : newDiff;
-        setTimeRelative(units[unitIndex], relativeDiff, rounded, dateSetter);
-    }
-
-    function onSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
-        const newOption = parseInt(event.target.value);
-        setSelectedOption(newOption);
-        const unitIndex = newOption % 7;
-        const relativeDiff = newOption === unitIndex ? -diffValue : diffValue;
-        setTimeRelative(units[unitIndex], relativeDiff, rounded, dateSetter);
-    }
-
-    function onRoundedClick() {
-        setRounded(prevRounded => !prevRounded);
-        onChangeRounded(!rounded, selectedOption, diffValue, dateSetter);
     }
 
     useLayoutEffect(() => {
-        setTimeRelative("minute", -30, false, dateSetter);
-    }, [dateSetter]);
+        const unitIndex = selectedOption % 7;
+        const relativeDiff = selectedOption === unitIndex ? -diffValue : diffValue;
+        setTimeRelative(units[unitIndex], relativeDiff, rounded, dateSetter);
+    }, [diffValue, rounded, selectedOption, dateSetter]);
 
     return (
         <section className="p-2 flex flex-col gap-5 items-start">
             <h3 className="grid grid-cols-2 self-stretch">
                 <input onChange={onInputChange} defaultValue={diffValue} className={inputStyles} type="number" min={0} />
-                <select onChange={onSelectChange} defaultValue="1" className={`place-self-end ${inputStyles}`}>
+                <select onChange={(event) => setSelectedOption(parseInt(event.target.value))} defaultValue={selectedOption} className={`place-self-end ${inputStyles}`}>
                     {options.map((option, index) => {
                         return <option value={index} key={option}>{option}</option>;
                     })}
@@ -63,7 +50,7 @@ const RelativeTime: React.FC<ModeProps> = ({ dateSetter }) => {
                 <button className={clsx("py-1 px-4 rounded-xl", {
                     "bg-sky-900": rounded,
                     "bg-neutral-800": !rounded
-                })} onClick={onRoundedClick}>
+                })} onClick={() => setRounded(prevRounded => !prevRounded)}>
                     <div className={clsx("transition-all ease-in-out", {
                         "translate-x-2": rounded,
                         "-translate-x-2": !rounded
