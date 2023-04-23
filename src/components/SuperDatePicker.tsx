@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Calendar from "./Calendar";
 import clsx from "clsx";
 import RelativeTime from "./RelativeTime";
@@ -17,6 +17,7 @@ type SuperDatePickerProps = {
     selectedDate: Date
     setSelectedDate: (date: Date) => void
     className?: string
+    setDateIsNow: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function parseDate(date: Date) {
@@ -30,18 +31,19 @@ function parseDate(date: Date) {
     return `${datePart} @ ${hoursPart}${mmssmsPart}`;
 }
 
-const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", selectedDate, setSelectedDate, defaultMode = 1 }) => {
+const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", setDateIsNow, selectedDate, setSelectedDate, defaultMode = 1 }) => {
     const [selectedMode, setSelectedMode] = useState(defaultMode);
     const [showedDate, setShowedDate] = useState(selectedDate);
     const relativeTimeData = useRelativeTime();
 
     const dateSetter = useCallback((newDate: Date) => {
+        setDateIsNow(false);
         setShowedDate(newDate);
         setSelectedDate(newDate);
-    }, [setSelectedDate]);
+    }, [setSelectedDate, setDateIsNow]);
 
     return (
-        <article className={`${className} font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col`}>
+        <article onClick={(event) => event.stopPropagation()} className={`${className} font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col`}>
             <h2 className="grid grid-cols-3">
                 <button onClick={() => setSelectedMode(0)} className={buttonStyles(selectedMode === 0)}>Absolute</button>
                 <button onClick={() => setSelectedMode(1)} className={buttonStyles(selectedMode === 1)}>Relative</button>
@@ -49,7 +51,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", selec
             </h2>
             {selectedMode === 0 && <Calendar dateSetter={dateSetter} selectedDate={showedDate} />}
             {selectedMode === 1 && <RelativeTime dateSetter={dateSetter} relativeTimeData={relativeTimeData} />}
-            {selectedMode === 2 && <NowTime dateSetter={dateSetter} />}
+            {selectedMode === 2 && <NowTime setDateIsNow={setDateIsNow} />}
             <div className="flex p-2 text-sm items-center">
                 <label className="bg-slate-300 dark:bg-sky-950 border dark:border-sky-950 px-1 py-1 dark:text-neutral-200 font-semibold" htmlFor="selectedDate">Selected date</label>
                 <input className="grow bg-transparent border dark:border-sky-950 px-2 py-1" name="selectedDate" disabled={true} value={parseDate(showedDate)} />
@@ -61,18 +63,14 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", selec
 export default SuperDatePicker;
 
 type NowTimeProps = {
-    dateSetter: (date: Date) => void
+    setDateIsNow: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const NowTime: React.FC<NowTimeProps> = ({ dateSetter }) => {
-    useLayoutEffect(() => {
-        dateSetter(new Date());
-    }, [dateSetter]);
-
+const NowTime: React.FC<NowTimeProps> = ({ setDateIsNow }) => {
     return (
         <section className="p-4 flex flex-col gap-3">
             <h3 className="text-sm">Setting the time to "now" means that on every refresh this time will be set to the time of the refresh.</h3>
-            <MainButton onClick={() => dateSetter(new Date())} >Set start date and time to now</MainButton>
+            <MainButton onClick={() => setDateIsNow(true)} >Set start date and time to now</MainButton>
         </section>
     );
 };

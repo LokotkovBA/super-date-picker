@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ArrowRight } from "~/assets/Arrows";
 import SuperDatePicker from "./SuperDatePicker";
 import MainButton from "./MainButton";
@@ -27,21 +27,47 @@ function useShowDate(selectedDate: Date, setSelectedDate: (date: Date) => void) 
 const DateRangeInput: React.FC<DateRangeInputProps> = ({ startDate, startDateSetter, endDate, endDateSetter }) => {
     const [showedStartDate, setShowedStartDate] = useShowDate(startDate, startDateSetter);
     const [showedEndDate, setShowedEndDate] = useShowDate(endDate, endDateSetter);
-    const [showPicker, setShowPicker] = useState(0);
+    const [showPicker, setShowPicker] = useState(-1);
+    const [startDateIsNow, setStartDateIsNow] = useState(false);
+    const [endDateIsNow, setEndDateIsNow] = useState(false);
+
+    function refresh() {
+        if (startDateIsNow) {
+            setShowedStartDate(new Date());
+        }
+        if (endDateIsNow) {
+            setShowedEndDate(new Date());
+        }
+    }
+
+    function onInputClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>, pickerNumber: number) {
+        event.stopPropagation();
+        setShowPicker(pickerNumber);
+    }
+
+    useEffect(() => {
+        function hidePicker() {
+            setShowPicker(-1);
+        }
+        document.addEventListener("click", hidePicker);
+        return () => {
+            document.removeEventListener("click", hidePicker);
+        };
+    }, []);
 
     return (
         <>
             <div className="flex items-center gap-2">
                 <div className="bg-neutral-50 dark:bg-neutral-900 border-slate-300 dark:text-neutral-50 dark:border-sky-950 border flex items-center">
                     <label className="text-sm self-stretch flex items-center bg-slate-300 dark:bg-sky-950 dark:border-sky-950 px-1 py-1 dark:text-neutral-200 font-semibold">Dates</label>
-                    <input onClick={() => setShowPicker(0)} value={showedStartDate.toISOString()} placeholder="start" className={inputStyles} type="text" />
+                    <input onClick={(event) => onInputClick(event, 0)} value={showedStartDate.toISOString()} placeholder="start" className={inputStyles} type="text" />
                     <ArrowRight className="dark:fill-neutral-400 fill-neutral-600" size="1rem" />
-                    <input onClick={() => setShowPicker(1)} value={showedEndDate.toISOString()} placeholder="end" className={inputStyles} type="text" />
+                    <input onClick={(event) => onInputClick(event, 1)} value={showedEndDate.toISOString()} placeholder="end" className={inputStyles} type="text" />
                 </div>
-                <MainButton className="py-3 px-5 leading-none flex items-center gap-2"><RefreshIcon size="1rem" className="fill-white" /> Refresh</MainButton>
+                <MainButton onClick={refresh} className="py-3 px-5 leading-none flex items-center gap-2"><RefreshIcon size="1rem" className="fill-white" /> Refresh</MainButton>
             </div>
-            {showPicker === 0 && <SuperDatePicker defaultMode={0} selectedDate={showedStartDate} setSelectedDate={setShowedStartDate} />}
-            {showPicker === 1 && <SuperDatePicker defaultMode={0} className="translate-x-20" selectedDate={showedEndDate} setSelectedDate={setShowedEndDate} />}
+            {showPicker === 0 && <SuperDatePicker defaultMode={0} selectedDate={showedStartDate} setSelectedDate={setShowedStartDate} setDateIsNow={setStartDateIsNow} />}
+            {showPicker === 1 && <SuperDatePicker defaultMode={0} selectedDate={showedEndDate} setSelectedDate={setShowedEndDate} setDateIsNow={setEndDateIsNow} className="translate-x-20" />}
         </>
     );
 };
