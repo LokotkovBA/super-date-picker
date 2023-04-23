@@ -21,6 +21,7 @@ type SuperDatePickerProps = {
     setSelectedDate: (date: Date) => void;
     className?: string;
     setDateIsNow: React.Dispatch<React.SetStateAction<boolean>>;
+    tailPosition?: string;
 };
 
 function parseDate(date: Date) {
@@ -35,6 +36,7 @@ function parseDate(date: Date) {
 }
 
 const SuperDatePicker: React.FC<SuperDatePickerProps> = ({
+    tailPosition = "",
     className = "",
     dateLabel = "Selected",
     setDateIsNow,
@@ -65,6 +67,14 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({
                 },
             )}
         >
+            <div
+                className={clsx(
+                    "absolute h-0 w-0 -translate-y-[95%] rounded-md border-[.75rem] border-t-0 border-transparent border-b-white dark:border-b-neutral-900",
+                    {
+                        [tailPosition]: !!tailPosition,
+                    },
+                )}
+            />
             <h2 className="grid grid-cols-3">
                 <button
                     onClick={() => setSelectedMode(0)}
@@ -95,7 +105,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({
                 />
             )}
             {selectedMode === 2 && <NowTime setDateIsNow={setDateIsNow} />}
-            <div className="flex items-center p-2 text-sm">
+            <div className="flex items-center p-2 pt-0 text-sm">
                 <Label>{dateLabel} date</Label>
                 <input
                     className="grow border bg-transparent px-2 py-1 dark:border-sky-950"

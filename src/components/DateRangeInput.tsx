@@ -115,6 +115,8 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
                     selectedDate={showedStartDate}
                     setSelectedDate={setShowedStartDate}
                     setDateIsNow={setStartDateIsNow}
+                    className="absolute translate-y-12"
+                    tailPosition="translate-x-20"
                 />
             )}
             {showPicker === 1 && (
@@ -124,7 +126,8 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
                     selectedDate={showedEndDate}
                     setSelectedDate={setShowedEndDate}
                     setDateIsNow={setEndDateIsNow}
-                    className="translate-x-20"
+                    className="absolute translate-y-12"
+                    tailPosition="translate-x-72"
                 />
             )}
         </>
