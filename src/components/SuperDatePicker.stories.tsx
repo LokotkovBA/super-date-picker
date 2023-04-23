@@ -13,14 +13,14 @@ const meta: Meta<typeof SuperDatePicker> = {
         return (
             <div className="flex flex-wrap gap-5 items-start">
                 <div className="flex flex-col gap-2">
-                    <StoryFn args={{ defaultMode: 0, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
-                    <StoryFn args={{ selectedDate: new Date(), setSelectedDate: action("Date set") }} />
-                    <StoryFn args={{ defaultMode: 2, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ setDateIsNow: action("Is date set to now"), defaultMode: 0, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ setDateIsNow: action("Is date set to now"), selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ setDateIsNow: action("Is date set to now"), defaultMode: 2, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
                 </div>
                 <div className="dark flex flex-col gap-2">
-                    <StoryFn args={{ defaultMode: 0, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
-                    <StoryFn args={{ selectedDate: new Date(), setSelectedDate: action("Date set") }} />
-                    <StoryFn args={{ defaultMode: 2, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ setDateIsNow: action("Is date set to now"), defaultMode: 0, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ setDateIsNow: action("Is date set to now"), selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ setDateIsNow: action("Is date set to now"), defaultMode: 2, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
                 </div>
             </div>
         );

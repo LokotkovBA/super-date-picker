@@ -4,6 +4,7 @@ import clsx from "clsx";
 import RelativeTime from "./RelativeTime";
 import { useRelativeTime } from "./RelativeTime/hooks";
 import MainButton from "./MainButton";
+import Label from "./Label";
 
 function buttonStyles(isActive: boolean) {
     return clsx("hover:underline p-2", {
@@ -13,6 +14,7 @@ function buttonStyles(isActive: boolean) {
 }
 
 type SuperDatePickerProps = {
+    dateLabel?: string
     defaultMode?: number
     selectedDate: Date
     setSelectedDate: (date: Date) => void
@@ -31,7 +33,7 @@ function parseDate(date: Date) {
     return `${datePart} @ ${hoursPart}${mmssmsPart}`;
 }
 
-const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", setDateIsNow, selectedDate, setSelectedDate, defaultMode = 1 }) => {
+const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", dateLabel = "Selected", setDateIsNow, selectedDate, setSelectedDate, defaultMode = 1 }) => {
     const [selectedMode, setSelectedMode] = useState(defaultMode);
     const [showedDate, setShowedDate] = useState(selectedDate);
     const relativeTimeData = useRelativeTime();
@@ -53,7 +55,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", setDa
             {selectedMode === 1 && <RelativeTime dateSetter={dateSetter} relativeTimeData={relativeTimeData} />}
             {selectedMode === 2 && <NowTime setDateIsNow={setDateIsNow} />}
             <div className="flex p-2 text-sm items-center">
-                <label className="bg-slate-300 dark:bg-sky-950 border dark:border-sky-950 px-1 py-1 dark:text-neutral-200 font-semibold" htmlFor="selectedDate">Selected date</label>
+                <Label>{dateLabel} date</Label>
                 <input className="grow bg-transparent border dark:border-sky-950 px-2 py-1" name="selectedDate" disabled={true} value={parseDate(showedDate)} />
             </div>
         </article>
