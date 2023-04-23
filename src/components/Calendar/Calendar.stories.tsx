@@ -24,7 +24,7 @@ const meta: Meta<typeof Calendar> = {
             return (
                 <div className="flex flex-wrap items-start gap-5">
                     <div className="flex flex-col items-start gap-2">
-                        <article className="flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
+                        <article className="flex w-64 md:w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
                             <StoryFn
                                 args={{
                                     selectedDate: showedDate1,
@@ -32,7 +32,7 @@ const meta: Meta<typeof Calendar> = {
                                 }}
                             />
                         </article>
-                        <article className="flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
+                        <article className="flex w-64 md:w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
                             <StoryFn
                                 args={{
                                     defaultMode: 1,
@@ -41,7 +41,7 @@ const meta: Meta<typeof Calendar> = {
                                 }}
                             />
                         </article>
-                        <article className="flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
+                        <article className="flex w-64 md:w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
                             <StoryFn
                                 args={{
                                     defaultMode: 2,
@@ -52,7 +52,7 @@ const meta: Meta<typeof Calendar> = {
                         </article>
                     </div>
                     <div className="dark flex flex-col items-start gap-2">
-                        <article className="flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
+                        <article className="flex w-64 md:w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
                             <StoryFn
                                 args={{
                                     selectedDate: showedDate2,
@@ -60,7 +60,7 @@ const meta: Meta<typeof Calendar> = {
                                 }}
                             />
                         </article>
-                        <article className="flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
+                        <article className="flex w-64 md:w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
                             <StoryFn
                                 args={{
                                     defaultMode: 1,
@@ -69,7 +69,7 @@ const meta: Meta<typeof Calendar> = {
                                 }}
                             />
                         </article>
-                        <article className="flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
+                        <article className="flex w-64 md:w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50">
                             <StoryFn
                                 args={{
                                     defaultMode: 2,
