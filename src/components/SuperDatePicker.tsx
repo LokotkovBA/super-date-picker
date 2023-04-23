@@ -3,6 +3,7 @@ import Calendar from "./Calendar";
 import clsx from "clsx";
 import RelativeTime from "./RelativeTime";
 import { useRelativeTime } from "./RelativeTime/hooks";
+import MainButton from "./MainButton";
 
 function buttonStyles(isActive: boolean) {
     return clsx("hover:underline p-2", {
@@ -15,6 +16,7 @@ type SuperDatePickerProps = {
     defaultMode?: number
     selectedDate: Date
     setSelectedDate: (date: Date) => void
+    className?: string
 }
 
 function parseDate(date: Date) {
@@ -28,7 +30,7 @@ function parseDate(date: Date) {
     return `${datePart} @ ${hoursPart}${mmssmsPart}`;
 }
 
-const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ selectedDate, setSelectedDate, defaultMode = 1 }) => {
+const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ className = "", selectedDate, setSelectedDate, defaultMode = 1 }) => {
     const [selectedMode, setSelectedMode] = useState(defaultMode);
     const [showedDate, setShowedDate] = useState(selectedDate);
     const relativeTimeData = useRelativeTime();
@@ -39,7 +41,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ selectedDate, setSele
     }, [setSelectedDate]);
 
     return (
-        <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+        <article className={`${className} font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col`}>
             <h2 className="grid grid-cols-3">
                 <button onClick={() => setSelectedMode(0)} className={buttonStyles(selectedMode === 0)}>Absolute</button>
                 <button onClick={() => setSelectedMode(1)} className={buttonStyles(selectedMode === 1)}>Relative</button>
@@ -70,7 +72,7 @@ const NowTime: React.FC<NowTimeProps> = ({ dateSetter }) => {
     return (
         <section className="p-4 flex flex-col gap-3">
             <h3 className="text-sm">Setting the time to "now" means that on every refresh this time will be set to the time of the refresh.</h3>
-            <button onClick={() => dateSetter(new Date())} className="text-white bg-sky-700 dark:bg-sky-900 rounded leading-loose hover:underline transition-all duration-300 ease-in-out hover:bg-sky-800 dark:hover:bg-sky-950 hover:-translate-y-px">Set start date and time to now</button>
+            <MainButton onClick={() => dateSetter(new Date())} >Set start date and time to now</MainButton>
         </section>
     );
 };

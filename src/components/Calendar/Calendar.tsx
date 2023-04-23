@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
-import { ArrowLeft, ArrowRight } from "~/assets/Arrows";
+import { ChevronLeft, ChevronRight } from "~/assets/Arrows";
 import { useCalendar, useTime } from "./hooks";
 import { daysOfWeek, hours, months } from "./utils";
 
@@ -72,10 +72,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
         <div className="flex justify-between gap-3 pl-3">
             <section className="py-3">
                 <h3 className="flex gap-2 mb-2">
-                    <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ArrowLeft size="1.5rem" className="dark:fill-neutral-50 fill-neutral-900" /></button>
+                    <button onClick={() => incrementMonth(-1)} className={`mr-auto ${arrowStyles}`}><ChevronLeft size="1.5rem" className="dark:fill-neutral-50 fill-neutral-900" /></button>
                     <button onClick={() => changeMode(1)} className={`font-medium ${headingTextStyles}`}>{months[selectedMonth]}</button>
                     <button onClick={() => changeMode(2)} className={`font-light text-neutral-500 dark:text-neutral-400 ${headingTextStyles}`}>{selectedYear}</button>
-                    <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ArrowRight size="1.5rem" className="dark:fill-neutral-50 fill-neutral-900" /></button>
+                    <button onClick={() => incrementMonth(1)} className={`ml-auto ${arrowStyles}`}><ChevronRight size="1.5rem" className="dark:fill-neutral-50 fill-neutral-900" /></button>
                 </h3>
                 <div className="grid grid-cols-7 gap-1 justify-items-center mt-auto mb-1">
                     {daysOfWeek.map(day => {
