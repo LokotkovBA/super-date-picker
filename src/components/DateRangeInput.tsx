@@ -71,9 +71,9 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
         function hidePicker() {
             setShowPicker(-1);
         }
-        document.addEventListener("click", hidePicker);
+        document.addEventListener("mousedown", hidePicker);
         return () => {
-            document.removeEventListener("click", hidePicker);
+            document.removeEventListener("mousedown", hidePicker);
         };
     }, []);
 
@@ -83,7 +83,7 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
                 <div className="flex items-center border border-slate-200 bg-neutral-50 dark:border-sky-950 dark:bg-neutral-900 dark:text-neutral-50">
                     <Label>Dates</Label>
                     <input
-                        onClick={(event) => onInputClick(event, 0)}
+                        onMouseDown={(event) => onInputClick(event, 0)}
                         value={showedStartDate.toISOString()}
                         placeholder="start"
                         className={inputStyles}
@@ -94,7 +94,7 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
                         size="1rem"
                     />
                     <input
-                        onClick={(event) => onInputClick(event, 1)}
+                        onMouseDown={(event) => onInputClick(event, 1)}
                         value={showedEndDate.toISOString()}
                         placeholder="end"
                         className={inputStyles}

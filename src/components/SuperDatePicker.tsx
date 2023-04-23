@@ -57,7 +57,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({
 
     return (
         <article
-            onClick={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
             className={clsx(
                 `flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50`,
                 {
