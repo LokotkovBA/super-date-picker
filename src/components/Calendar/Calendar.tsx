@@ -5,13 +5,14 @@ import { useCalendar, useTime } from "./hooks";
 import { daysOfWeek, hours, months } from "./utils";
 
 type CalendarProps = {
+    defaultMode?: number
     selectedDate: Date
     dateSetter: (date: Date) => void
 }
 
-const Calendar: React.FC<CalendarProps> = ({ selectedDate, dateSetter }) => {
+const Calendar: React.FC<CalendarProps> = ({ selectedDate, dateSetter, defaultMode = 0 }) => {
     const calendarData = useCalendar(selectedDate, dateSetter);
-    const [modeSelect, setModeSelect] = useState(0);
+    const [modeSelect, setModeSelect] = useState(defaultMode);
     return <div onClick={(event) => event.stopPropagation()} className="text-xs">
         {modeSelect === 0 && <DatePicker calendarData={calendarData} changeMode={setModeSelect} updateDate={calendarData.updateDate} selectedDate={selectedDate} dateSetter={dateSetter} />}
         {modeSelect === 1 && <MonthPicker selectMonth={calendarData.selectMonth} changeMode={setModeSelect} selectedMonth={calendarData.selectedMonth} />}
@@ -138,6 +139,13 @@ type MonthPickerProps = {
     changeMode: React.Dispatch<React.SetStateAction<number>>
 }
 
+function monthYearStyle(isSelected: boolean) {
+    return clsx("h-6 text-xs rounded my-2 border-2", {
+        "text-white bg-sky-600 border-sky-600 dark:bg-sky-700 dark:border-sky-500 font-semibold": isSelected,
+        "hover:bg-neutral-100 border-transparent dark:hover:bg-neutral-800 dark:text-neutral-200": !isSelected
+    });
+}
+
 const MonthPicker: React.FC<MonthPickerProps> = ({ selectMonth, changeMode, selectedMonth }) => {
     function onMonthClick(monthIndex: number) {
         selectMonth(monthIndex);
@@ -147,10 +155,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ selectMonth, changeMode, sele
     return (
         <section className="h-60 grid grid-cols-3 pt-4 px-2">
             {months.map((month, index) => (
-                <button key={month} className={clsx("h-6 text-xs rounded my-2", {
-                    "text-white bg-sky-600 dark:bg-sky-700 font-semibold": index === selectedMonth,
-                    "hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-neutral-200": index !== selectedMonth
-                })} onClick={() => onMonthClick(index)}>
+                <button key={month} className={monthYearStyle(index === selectedMonth)} onClick={() => onMonthClick(index)}>
                     {month}
                 </button>
             ))}
@@ -183,10 +188,7 @@ const YearPicker: React.FC<YearPickerProps> = ({ selectedYear, selectYear, chang
     return (
         <section className="h-60 grid grid-cols-3 px-2">
             {yearsRange.map((year) => (
-                <button key={year} className={clsx("w-32 h-6 text-xs rounded my-2", {
-                    "text-white bg-sky-600 dark:bg-sky-700 font-semibold": year === selectedYear,
-                    "hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-neutral-200": year !== selectedYear
-                })} onClick={() => onYearClick(year)}>
+                <button key={year} className={monthYearStyle(year === selectedYear)} onClick={() => onYearClick(year)}>
                     {year}
                 </button>
             ))}
