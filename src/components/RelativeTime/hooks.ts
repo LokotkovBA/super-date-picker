@@ -7,9 +7,13 @@ export function useRelativeTime() {
     const [showWarning, setShowWarning] = useState(false);
 
     return {
-        rounded, setRounded,
-        selectedOption, setSelectedOption,
-        diffValue, setDiffValue,
-        showWarning, setShowWarning
-    }
+        rounded,
+        setRounded,
+        selectedOption,
+        setSelectedOption,
+        diffValue,
+        setDiffValue,
+        showWarning,
+        setShowWarning,
+    };
 }

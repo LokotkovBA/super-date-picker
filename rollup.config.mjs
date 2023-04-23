@@ -16,13 +16,13 @@ export default [
             {
                 file: packageJson.main,
                 format: "cjs",
-                sourcemap: true
+                sourcemap: true,
             },
             {
                 file: packageJson.module,
                 format: "esm",
-                sourcemap: true
-            }
+                sourcemap: true,
+            },
         ],
         plugins: [
             resolve(),
@@ -30,16 +30,16 @@ export default [
             terser(),
             typescript({
                 tsconfig: "./tsconfig.json",
-                exclude: ["**/stories", "**/*.stories.tsx"]
+                exclude: ["**/stories", "**/*.stories.tsx"],
             }),
             postcss({ extensions: [".css"] }),
-            peerDepsExternal()
-        ]
+            peerDepsExternal(),
+        ],
     },
     {
         input: "dist/esm/types/index.d.ts",
         output: [{ file: "dist/index.d.ts", format: "esm" }],
         plugins: [dts.default()],
         external: [/\.(css|less|scss)$/],
-    }
+    },
 ];

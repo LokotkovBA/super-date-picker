@@ -88,7 +88,11 @@ export function useTime(date: Date, dateSetter: (date: Date) => void) {
     }
 
     function setTime(hours: number, minutes?: number, seconds?: number) {
-        setStates(hours, minutes ? minutes : date.getMinutes(), seconds ? seconds : date.getSeconds());
+        setStates(
+            hours,
+            minutes ? minutes : date.getMinutes(),
+            seconds ? seconds : date.getSeconds(),
+        );
         setIsApprox(true);
     }
 
@@ -101,6 +105,6 @@ export function useTime(date: Date, dateSetter: (date: Date) => void) {
         halfPast,
         selectHour,
         setTime,
-        isApprox
+        isApprox,
     } as const;
 }

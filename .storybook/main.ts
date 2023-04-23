@@ -24,10 +24,12 @@ const config: StorybookConfig = {
     },
     webpackFinal(config) {
         if (config.resolve) {
-            config.resolve.plugins = [...(config.resolve.plugins || []),
-            new TsconfigPathsPlugin({
-                extensions: config.resolve.extensions,
-            })];
+            config.resolve.plugins = [
+                ...(config.resolve.plugins || []),
+                new TsconfigPathsPlugin({
+                    extensions: config.resolve.extensions,
+                }),
+            ];
         }
         config.optimization = {
             minimize: false,

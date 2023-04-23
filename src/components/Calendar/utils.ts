@@ -25,18 +25,39 @@ export const hours = [
     "23",
 ] as const;
 export const daysOfWeek = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"] as const;
-export const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] as const;
+export const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+] as const;
 
 export function getCalendarDates(selectedDate: Date) {
     const arrayOfDays = new Array<number>(35).fill(0);
     const arrayOfMonths = new Array<number>(35).fill(-1);
 
-    const [userSelectedDay, todayIndex] = setCalendarDates(selectedDate, arrayOfDays, arrayOfMonths);
+    const [userSelectedDay, todayIndex] = setCalendarDates(
+        selectedDate,
+        arrayOfDays,
+        arrayOfMonths,
+    );
 
     return { arrayOfDays, arrayOfMonths, userSelectedDay, todayIndex } as const;
 }
 
-function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: number[]) {
+function setCalendarDates(
+    date: Date,
+    arrayOfDays: number[],
+    arrayOfMonths: number[],
+) {
     let selectedDateIndex = 0;
 
     const selectedDate = date.getDate();
@@ -70,7 +91,10 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
     const today = new Date();
     let todayIndex = -1;
     let todayDate = -1;
-    if (today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear()) {
+    if (
+        today.getMonth() === date.getMonth() &&
+        today.getFullYear() === date.getFullYear()
+    ) {
         todayDate = today.getDate();
     }
 
@@ -103,4 +127,3 @@ function setCalendarDates(date: Date, arrayOfDays: number[], arrayOfMonths: numb
     date.setDate(selectedDate);
     return [selectedDateIndex, todayIndex] as const;
 }
-

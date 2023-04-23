@@ -25,7 +25,12 @@ export const units = [
     "year",
 ] as const;
 
-export function setTimeRelative(unit: typeof units[number], value: number, rounded: boolean, dateSetter: (date: Date) => void) {
+export function setTimeRelative(
+    unit: (typeof units)[number],
+    value: number,
+    rounded: boolean,
+    dateSetter: (date: Date) => void,
+) {
     const date = new Date();
     let diff = value;
     switch (unit) {
@@ -68,4 +73,3 @@ export function setTimeRelative(unit: typeof units[number], value: number, round
     }
     dateSetter(date);
 }
-
