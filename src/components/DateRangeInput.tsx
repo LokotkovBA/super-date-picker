@@ -109,7 +109,8 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
                     onClick={refresh}
                     className="flex items-center gap-2 px-5 py-3 leading-none"
                 >
-                    <RefreshIcon size="1rem" className="fill-white" /> Refresh
+                    <RefreshIcon size="1rem" className="fill-white" />
+                    <span className="hidden md:inline">Refresh</span>
                 </MainButton>
             </div>
             {showPicker === 0 && (
