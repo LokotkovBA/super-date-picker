@@ -87,7 +87,7 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
                     <input
                         onMouseDown={(event) => onInputClick(event, 0)}
                         value={showedStartDate.toISOString()}
-                        readOnly={true}
+                        readOnly
                         placeholder="start"
                         className={inputStyles}
                         type="text"
@@ -99,7 +99,7 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
                     <input
                         onMouseDown={(event) => onInputClick(event, 1)}
                         value={showedEndDate.toISOString()}
-                        readOnly={true}
+                        readOnly
                         placeholder="end"
                         className={inputStyles}
                         type="text"
