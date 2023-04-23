@@ -12,9 +12,9 @@ function buttonStyles(isActive: boolean) {
 }
 
 type SuperDatePickerProps = {
+    defaultMode?: number
     selectedDate: Date
     setSelectedDate: (date: Date) => void
-    className?: string
 }
 
 function parseDate(date: Date) {
@@ -28,8 +28,8 @@ function parseDate(date: Date) {
     return `${datePart} @ ${hoursPart}${mmssmsPart}`;
 }
 
-const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ selectedDate, setSelectedDate }) => {
-    const [selectedMode, setSelectedMode] = useState(1);
+const SuperDatePicker: React.FC<SuperDatePickerProps> = ({ selectedDate, setSelectedDate, defaultMode = 1 }) => {
+    const [selectedMode, setSelectedMode] = useState(defaultMode);
     const [showedDate, setShowedDate] = useState(selectedDate);
     const relativeTimeData = useRelativeTime();
 

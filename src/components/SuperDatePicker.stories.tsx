@@ -12,9 +12,15 @@ const meta: Meta<typeof SuperDatePicker> = {
     decorators: [(StoryFn) => {
         return (
             <div className="flex flex-wrap gap-5 items-start">
-                <StoryFn args={{ selectedDate: new Date(), setSelectedDate: action("Date set") }} />
-                <div className="dark">
+                <div className="flex flex-col gap-2">
+                    <StoryFn args={{ defaultMode: 0, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
                     <StoryFn args={{ selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ defaultMode: 2, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                </div>
+                <div className="dark flex flex-col gap-2">
+                    <StoryFn args={{ defaultMode: 0, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ selectedDate: new Date(), setSelectedDate: action("Date set") }} />
+                    <StoryFn args={{ defaultMode: 2, selectedDate: new Date(), setSelectedDate: action("Date set") }} />
                 </div>
             </div>
         );

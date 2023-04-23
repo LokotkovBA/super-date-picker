@@ -22,12 +22,26 @@ const meta: Meta<typeof Calendar> = {
         }, []);
         return (
             <div className="flex flex-wrap gap-5 items-start">
-                <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
-                    <StoryFn args={{ selectedDate: showedDate1, dateSetter: dateSetter1 }} />
-                </article>
-                <div className="dark">
+                <div className="flex flex-col items-start gap-2">
+                    <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                        <StoryFn args={{ selectedDate: showedDate1, dateSetter: dateSetter1 }} />
+                    </article>
+                    <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                        <StoryFn args={{ defaultMode: 1, selectedDate: showedDate1, dateSetter: dateSetter1 }} />
+                    </article>
+                    <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                        <StoryFn args={{ defaultMode: 2, selectedDate: showedDate1, dateSetter: dateSetter1 }} />
+                    </article>
+                </div>
+                <div className="dark flex flex-col items-start gap-2">
                     <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
                         <StoryFn args={{ selectedDate: showedDate2, dateSetter: dateSetter2 }} />
+                    </article>
+                    <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                        <StoryFn args={{ defaultMode: 1, selectedDate: showedDate2, dateSetter: dateSetter2 }} />
+                    </article>
+                    <article className="font-sans w-96 bg-white shadow-lg border text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded flex flex-col">
+                        <StoryFn args={{ defaultMode: 2, selectedDate: showedDate2, dateSetter: dateSetter2 }} />
                     </article>
                 </div>
             </div>
@@ -38,15 +52,5 @@ const meta: Meta<typeof Calendar> = {
 export default meta;
 type Story = StoryObj<typeof Calendar>;
 
-const MockParent = () => {
-    const [showedDate, setShowedDate] = useState(new Date());
-    const dateSetter = useCallback((date: Date) => {
-        setShowedDate(date);
-        action("Date set")(date);
-    }, []);
-    return <Calendar selectedDate={showedDate} dateSetter={dateSetter} />;
-};
-
 export const Themes: Story = {
-    render: () => <MockParent />
 };
