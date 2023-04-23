@@ -10,6 +10,7 @@ type DateRangeInputProps = {
     startDateSetter: (date: Date) => void;
     endDate: Date;
     endDateSetter: (date: Date) => void;
+    defaultPicker?: number;
 };
 
 const inputStyles =
@@ -33,6 +34,7 @@ function useShowDate(
 }
 
 const DateRangeInput: React.FC<DateRangeInputProps> = ({
+    defaultPicker = -1,
     startDate,
     startDateSetter,
     endDate,
@@ -46,7 +48,7 @@ const DateRangeInput: React.FC<DateRangeInputProps> = ({
         endDate,
         endDateSetter,
     );
-    const [showPicker, setShowPicker] = useState(-1);
+    const [showPicker, setShowPicker] = useState(defaultPicker);
     const [startDateIsNow, setStartDateIsNow] = useState(false);
     const [endDateIsNow, setEndDateIsNow] = useState(false);
 

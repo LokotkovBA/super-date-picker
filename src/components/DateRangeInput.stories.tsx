@@ -32,6 +32,7 @@ const meta: Meta<typeof DateRangeInput> = {
                                 startDateSetter,
                                 endDate,
                                 endDateSetter,
+                                defaultPicker: 0
                             }}
                         />
                     </div>
@@ -42,6 +43,7 @@ const meta: Meta<typeof DateRangeInput> = {
                                 startDateSetter,
                                 endDate,
                                 endDateSetter,
+                                defaultPicker: 1
                             }}
                         />
                     </div>
