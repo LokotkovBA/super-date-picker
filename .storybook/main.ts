@@ -29,6 +29,10 @@ const config: StorybookConfig = {
                 extensions: config.resolve.extensions,
             })];
         }
+        config.optimization = {
+            minimize: false,
+            minimizer: [],
+        };
         return config;
     },
 };
