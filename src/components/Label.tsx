@@ -12,7 +12,7 @@ const Label: React.FC<LabelProps & PropsWithChildren> = ({
     return (
         <label
             className={clsx(
-                "flex items-center self-stretch bg-slate-200 px-3 py-1 text-xs font-semibold dark:border-sky-950 dark:bg-sky-950 dark:text-neutral-200",
+                "flex items-center self-stretch bg-slate-200 p-1 text-xs font-semibold dark:border-sky-950 dark:bg-sky-950 dark:text-neutral-200 md:px-3",
                 {
                     [className]: !!className,
                 },

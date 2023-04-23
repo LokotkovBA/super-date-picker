@@ -61,7 +61,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({
         <article
             onMouseDown={(event) => event.stopPropagation()}
             className={clsx(
-                `flex w-96 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50`,
+                `flex w-64 flex-col rounded border bg-white font-sans text-neutral-900 shadow-lg dark:bg-neutral-900 dark:text-neutral-50 md:w-96`,
                 {
                     [className]: !!className,
                 },
@@ -108,7 +108,7 @@ const SuperDatePicker: React.FC<SuperDatePickerProps> = ({
             <div className="flex items-center p-2 pt-0 text-sm">
                 <Label>{dateLabel} date</Label>
                 <input
-                    className="grow border bg-transparent px-2 py-1 dark:border-sky-950"
+                    className="grow border bg-transparent p-1 dark:border-sky-950 md:px-2"
                     name="selectedDate"
                     disabled={true}
                     value={parseDate(showedDate)}

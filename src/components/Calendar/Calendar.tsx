@@ -104,7 +104,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     }
 
     return (
-        <div className="flex justify-between gap-3 pl-3">
+        <div className="flex justify-between gap-3 px-3 md:pr-0">
             <section className="py-3">
                 <h3 className="mb-2 flex gap-2">
                     <button
@@ -208,7 +208,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ selecteDate, dateSetter }) => {
     return (
         <section
             tabIndex={0}
-            className="flex items-center pr-2 focus:bg-sky-100 dark:focus:bg-neutral-800"
+            className="hidden items-center pr-2 focus:bg-sky-100 dark:focus:bg-neutral-800 md:flex"
         >
             <ul
                 ref={listRef}
