@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { SuperDatePicker } from "..";
 
+
+const date = new Date("April 20, 2023 15:20:20");
+
 const meta: Meta<typeof SuperDatePicker> = {
     /* 👇 The title prop is optional.
      * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
@@ -18,14 +21,14 @@ const meta: Meta<typeof SuperDatePicker> = {
                             args={{
                                 setDateIsNow: action("Is date set to now"),
                                 defaultMode: 0,
-                                selectedDate: new Date(),
+                                selectedDate: date,
                                 setSelectedDate: action("Date set"),
                             }}
                         />
                         <StoryFn
                             args={{
                                 setDateIsNow: action("Is date set to now"),
-                                selectedDate: new Date(),
+                                selectedDate: date,
                                 setSelectedDate: action("Date set"),
                             }}
                         />
@@ -33,7 +36,7 @@ const meta: Meta<typeof SuperDatePicker> = {
                             args={{
                                 setDateIsNow: action("Is date set to now"),
                                 defaultMode: 2,
-                                selectedDate: new Date(),
+                                selectedDate: date,
                                 setSelectedDate: action("Date set"),
                             }}
                         />
@@ -43,14 +46,14 @@ const meta: Meta<typeof SuperDatePicker> = {
                             args={{
                                 setDateIsNow: action("Is date set to now"),
                                 defaultMode: 0,
-                                selectedDate: new Date(),
+                                selectedDate: date,
                                 setSelectedDate: action("Date set"),
                             }}
                         />
                         <StoryFn
                             args={{
                                 setDateIsNow: action("Is date set to now"),
-                                selectedDate: new Date(),
+                                selectedDate: date,
                                 setSelectedDate: action("Date set"),
                             }}
                         />
@@ -58,7 +61,7 @@ const meta: Meta<typeof SuperDatePicker> = {
                             args={{
                                 setDateIsNow: action("Is date set to now"),
                                 defaultMode: 2,
-                                selectedDate: new Date(),
+                                selectedDate: date,
                                 setSelectedDate: action("Date set"),
                             }}
                         />

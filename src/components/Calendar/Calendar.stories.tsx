@@ -11,8 +11,8 @@ const meta: Meta<typeof Calendar> = {
     component: Calendar,
     decorators: [
         (StoryFn) => {
-            const [showedDate1, setShowedDate1] = useState(new Date());
-            const [showedDate2, setShowedDate2] = useState(new Date());
+            const [showedDate1, setShowedDate1] = useState(new Date("April 20, 2023 15:20:20"));
+            const [showedDate2, setShowedDate2] = useState(new Date("April 20, 2023 15:20:20"));
             const dateSetter1 = useCallback((date: Date) => {
                 setShowedDate1(date);
                 action("Date set")(date);

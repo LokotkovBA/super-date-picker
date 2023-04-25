@@ -11,8 +11,8 @@ const meta: Meta<typeof DateRangeInput> = {
     component: DateRangeInput,
     decorators: [
         (StoryFn) => {
-            const [startDate, setStartDate] = useState(new Date());
-            const [endDate, setEndDate] = useState(new Date());
+            const [startDate, setStartDate] = useState(new Date("April 20, 2023 15:20:20"));
+            const [endDate, setEndDate] = useState(new Date("April 20, 2023 15:20:20"));
 
             const startDateSetter = useCallback((date: Date) => {
                 setStartDate(date);
