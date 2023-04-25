@@ -1,6 +1,7 @@
 # super-date-picker
-[Storybook со всеми компонентами](https://main--6441bdeb65ebb7e85a8c2a04.chromatic.com/) \
-Сделан для тестового задания \
+[Storybook со всеми компонентами.](https://main--6441bdeb65ebb7e85a8c2a04.chromatic.com/) \
+Сделан для тестового задания. \
+Отображение календаря и все манипуляции с датами сделаны с помощью JavaScript объекта [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date). \
 За образец взят https://eui.elastic.co/pr_3350/#/forms/super-date-picker
 
 Итоговый компонент - [DateRangeInput](#DateRangeInput)
