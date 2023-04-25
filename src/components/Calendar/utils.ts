@@ -24,7 +24,9 @@ export const hours = [
     "22",
     "23",
 ] as const;
+
 export const daysOfWeek = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"] as const;
+
 export const months = [
     "January",
     "February",
@@ -126,4 +128,14 @@ function setCalendarDates(
     }
     date.setDate(selectedDate);
     return [selectedDateIndex, todayIndex] as const;
+}
+
+export function getYearsRange(selectedYear: number) {
+    let startYear = selectedYear - 7;
+    const range = new Array<number>(15);
+    for (let i = 0; i < 15; i++) {
+        range[i] = startYear;
+        startYear++;
+    }
+    return range;
 }

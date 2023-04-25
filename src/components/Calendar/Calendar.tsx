@@ -1,8 +1,8 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "~/assets/Arrows";
 import { useCalendar, useTime } from "./hooks";
-import { daysOfWeek, hours, months } from "./utils";
+import { daysOfWeek, getYearsRange, hours, months } from "./utils";
 
 type CalendarProps = {
     defaultMode?: number;
@@ -296,15 +296,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
     selectYear,
     changeMode,
 }) => {
-    const yearsRange = useMemo(() => {
-        let startYear = selectedYear - 7;
-        const range = new Array<number>(15);
-        for (let i = 0; i < 15; i++) {
-            range[i] = startYear;
-            startYear++;
-        }
-        return range;
-    }, [selectedYear]);
+    const yearsRange = getYearsRange(selectedYear);
 
     function onYearClick(year: number) {
         selectYear(year);
@@ -325,3 +317,4 @@ const YearPicker: React.FC<YearPickerProps> = ({
         </section>
     );
 };
+
